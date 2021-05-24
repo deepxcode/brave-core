@@ -1190,6 +1190,47 @@ BraveRewardsShouldShowOnboardingFunction::Run() {
   return RespondNow(OneArgument(base::Value(should_show)));
 }
 
+BraveRewardsGetScheduledCaptchaInfoFunction::
+    ~BraveRewardsGetScheduledCaptchaInfoFunction() = default;
+
+ExtensionFunction::ResponseAction
+BraveRewardsGetScheduledCaptchaInfoFunction::Run() {
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  auto* rewards_service = RewardsServiceFactory::GetForProfile(profile);
+  if (!rewards_service) {
+    return RespondNow(Error("Rewards service is not initialized"));
+  }
+
+  std::string url;
+  bool max_attempts_exceeded = false;
+  rewards_service->GetScheduledCaptchaInfo(&url, &max_attempts_exceeded);
+
+  base::DictionaryValue dict;
+  dict.SetString("url", url);
+  dict.SetBoolean("maxAttemptsExceeded", max_attempts_exceeded);
+
+  return RespondNow(OneArgument(std::move(dict)));
+}
+
+BraveRewardsUpdateScheduledCaptchaResultFunction::
+    ~BraveRewardsUpdateScheduledCaptchaResultFunction() = default;
+
+ExtensionFunction::ResponseAction
+BraveRewardsUpdateScheduledCaptchaResultFunction::Run() {
+  std::unique_ptr<brave_rewards::UpdateScheduledCaptchaResult::Params> params(
+      brave_rewards::UpdateScheduledCaptchaResult::Params::Create(*args_));
+  EXTENSION_FUNCTION_VALIDATE(params.get());
+
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  auto* rewards_service = RewardsServiceFactory::GetForProfile(profile);
+  if (!rewards_service) {
+    return RespondNow(Error("Rewards service is not initialized"));
+  }
+
+  rewards_service->UpdateScheduledCaptchaResult(params->result);
+  return RespondNow(NoArguments());
+}
+
 BraveRewardsEnableRewardsFunction::~BraveRewardsEnableRewardsFunction() =
     default;
 
