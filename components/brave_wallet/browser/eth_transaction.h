@@ -10,9 +10,9 @@
 #include <vector>
 
 #include "base/gtest_prod_util.h"
-#include "base/optional.h"
 #include "brave/components/brave_wallet/browser/brave_wallet_types.h"
 #include "brave/components/brave_wallet/browser/eth_address.h"
+#include "third_party/abseil-cpp/absl/types/optional.h"
 
 namespace base {
 class Value;
@@ -35,7 +35,7 @@ class EthTransaction {
   ~EthTransaction();
   bool operator==(const EthTransaction&) const;
 
-  static base::Optional<EthTransaction> FromValue(const base::Value& value);
+  static absl::optional<EthTransaction> FromValue(const base::Value& value);
 
   uint256_t nonce() const { return nonce_; }
   uint256_t gas_price() const { return gas_price_; }

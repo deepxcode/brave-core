@@ -12,6 +12,7 @@
 #include "brave/components/brave_wallet/browser/eth_transaction.h"
 #include "brave/components/brave_wallet/browser/hd_key.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "third_party/abseil-cpp/absl/types/optional.h"
 
 namespace brave_wallet {
 
@@ -156,7 +157,7 @@ TEST(EthTransactionUnitTest, TransactionAndValue) {
       0x0de0b6b3a7640000, std::vector<uint8_t>());
   base::Value tx_value = tx.ToValue();
   auto tx_from_value = EthTransaction::FromValue(tx_value);
-  ASSERT_NE(tx_from_value, base::nullopt);
+  ASSERT_NE(tx_from_value, absl::nullopt);
   EXPECT_EQ(tx_from_value, tx);
 }
 
