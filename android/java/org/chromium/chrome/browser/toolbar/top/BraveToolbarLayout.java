@@ -469,7 +469,7 @@ public abstract class BraveToolbarLayout extends ToolbarLayout
                 || BraveActivity.getBraveActivity() == null
                 || BraveActivity.getBraveActivity().getActivityTab() == null
                 || UrlUtilities.isNTPUrl(
-                        BraveActivity.getBraveActivity().getActivityTab().getUrlString())) {
+                        BraveActivity.getBraveActivity().getActivityTab().getUrl().getSpec())) {
             return;
         }
 
