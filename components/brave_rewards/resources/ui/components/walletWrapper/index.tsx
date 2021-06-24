@@ -91,13 +91,18 @@ export interface ActionWallet {
 export type NotificationType =
   'ads' |
   'backupWallet' |
+  'batNotAllowedForUser' |
+  'blockedUser' |
   'contribute' |
   'deviceLimitReached' |
   'error' |
   'grant' |
   'insufficientFunds' |
   'pendingContribution' |
+  'pendingUser' |
+  'restrictedUser' |
   'tipsProcessed' |
+  'unverifiedUser' |
   'verifyWallet' |
   ''
 
@@ -277,6 +282,26 @@ export default class WalletWrapper extends React.PureComponent<Props, State> {
         buttonText = getLocale('deviceLimitReachedLearnMore')
         buttonAction = this.onNotificationClick
         break
+      case 'batNotAllowedForUser':
+        buttonText = getLocale('batNotAllowedForUserLearnMore')
+        buttonAction = this.onNotificationClick
+        break
+      case 'blockedUser':
+        buttonText = getLocale('blockedUserLearnMore')
+        buttonAction = this.onNotificationClick
+        break
+      case 'pendingUser':
+        buttonText = getLocale('pendingUserLearnMore')
+        buttonAction = this.onNotificationClick
+        break
+      case 'restrictedUser':
+        buttonText = getLocale('restrictedUserLearnMore')
+        buttonAction = this.onNotificationClick
+        break
+      case 'unverifiedUser':
+        buttonText = getLocale('unverifiedUserLearnMore')
+        buttonAction = this.onNotificationClick
+        break
       default:
         buttonText = getLocale('ok').toUpperCase()
         break
@@ -453,8 +478,13 @@ export default class WalletWrapper extends React.PureComponent<Props, State> {
     switch (notification.type) {
       case 'ads':
       case 'backupWallet':
+	  case 'batNotAllowedForUser':
+	  case 'blockedUser':
       case 'deviceLimitReached':
       case 'insufficientFunds':
+	  case 'pendingUser':
+	  case 'restrictedUser':
+	  case 'unverifiedUser':
       case 'verifyWallet':
         icon = megaphoneIconUrl
         break
@@ -490,6 +520,12 @@ export default class WalletWrapper extends React.PureComponent<Props, State> {
       case 'backupWallet':
         typeText = getLocale('backupWalletTitle')
         break
+      case 'batNotAllowedForUser':
+        typeText = getLocale('batNotAllowedForUserTitle')
+        break
+      case 'blockedUser':
+        typeText = getLocale('blockedUserTitle')
+        break
       case 'contribute':
         typeText = getLocale('braveContributeTitle')
         break
@@ -502,11 +538,20 @@ export default class WalletWrapper extends React.PureComponent<Props, State> {
       case 'insufficientFunds':
         typeText = getLocale('insufficientFunds')
         break
+      case 'pendingContribution':
+        typeText = getLocale('pendingContributionTitle')
+        break
+      case 'pendingUser':
+        typeText = getLocale('pendingUserTitle')
+        break
+      case 'restrictedUser':
+        typeText = getLocale('restrictedUserTitle')
+        break
       case 'tipsProcessed':
         typeText = getLocale('contributionTips')
         break
-      case 'pendingContribution':
-        typeText = getLocale('pendingContributionTitle')
+      case 'unverifiedUser':
+        typeText = getLocale('unverifiedUserTitle')
         break
       case 'verifyWallet':
         typeText = getLocale('verifyWalletTitle')

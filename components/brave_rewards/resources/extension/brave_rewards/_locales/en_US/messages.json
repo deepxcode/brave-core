@@ -219,6 +219,66 @@
     "message": "Please backup your Brave wallet.",
     "description": "Description for backup wallet notification"
   },
+  "batNotAllowedForUserLearnMore": {
+    "message": "Learn More",
+    "description": "Notification button text to learn more about why BAT is not allowed for user"
+  },
+  "batNotAllowedForUserTitle": {
+    "message": "BAT not allowed for user.",
+    "description": "Title for BAT not allowed for user notification"
+  },
+  "batNotAllowedForUserNotification": {
+    "message": "Uphold reported that BAT is not available in your region yet. :(",
+    "description": "Description for BAT not allowed for user notification"
+  },
+  "blockedUserLearnMore": {
+    "message": "Learn More",
+    "description": "Notification button text to learn more about the blocked user status"
+  },
+  "blockedUserTitle": {
+    "message": "Blocked user.",
+    "description": "Title for blocked user notification"
+  },
+  "blockedUserNotification": {
+    "message": "Your account is blocked on Uphold's end.",
+    "description": "Description for blocked user notification"
+  },
+  "pendingUserLearnMore": {
+    "message": "Learn More",
+    "description": "Notification button text to learn more about the pending user status"
+  },
+  "pendingUserTitle": {
+    "message": "Pending user.",
+    "description": "Title for pending user notification"
+  },
+  "pendingUserNotification": {
+    "message": "Your account is pending on Uphold's end.",
+    "description": "Description for pending user notification"
+  },
+  "restrictedUserLearnMore": {
+    "message": "Learn More",
+    "description": "Notification button text to learn more about the restricted user status"
+  },
+  "restrictedUserTitle": {
+    "message": "Restricted user.",
+    "description": "Title for restricted user notification"
+  },
+  "restrictedUserNotification": {
+    "message": "Your account is restricted on Uphold's end.",
+    "description": "Description for restricted user notification"
+  },
+  "unverifiedUserLearnMore": {
+    "message": "Learn More",
+    "description": "Notification button text to learn more about the membership process"
+  },
+  "unverifiedUserTitle": {
+    "message": "Unverified user.",
+    "description": "Title for unverified user notification"
+  },
+  "unverifiedUserNotification": {
+    "message": "You haven't completed the membership process on Uphold's end.",
+    "description": "Description for unverified user notification"
+  },
   "deviceLimitReachedLearnMore": {
     "message": "Learn More",
     "description": "Notification button text to learn more about device limit"

@@ -17,6 +17,15 @@ class LedgerImpl;
 
 namespace uphold {
 
+namespace notifications {
+const char kBATNotAllowedForUser[] = "bat_not_allowed_for_user";
+const char kBlockedUser[] = "blocked_user";
+const char kPendingUser[] = "pending_user";
+const char kRestrictedUser[] = "restricted_user";
+const char kUnverifiedUser[] = "unverified_user";
+const char kWalletDeviceLimitReached[] = "wallet_device_limit_reached";
+}
+
 const char kUrlStaging[] = "https://wallet-sandbox.uphold.com";
 const char kUrlProduction[] = "https://uphold.com";
 const char kFeeAddressStaging[] = "1b2b466f-5c15-49bf-995e-c91777d3da93";
