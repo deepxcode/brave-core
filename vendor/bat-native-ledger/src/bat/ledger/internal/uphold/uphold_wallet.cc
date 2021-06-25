@@ -18,20 +18,19 @@ namespace ledger {
 namespace uphold {
 
 namespace {
-const char* GetNotificationForUserStatus(const UserStatus status,
-                                         const bool verified) {
+std::string GetNotificationForUserStatus(UserStatus status, bool verified) {
   switch (status) {
     case UserStatus::BLOCKED:
       return notifications::kBlockedUser;
     case UserStatus::OK:
-      return !verified ? notifications::kUnverifiedUser : nullptr;
+      return !verified ? notifications::kUnverifiedUser : std::string{};
     case UserStatus::PENDING:
       return notifications::kPendingUser;
     case UserStatus::RESTRICTED:
       return notifications::kRestrictedUser;
     default:
       DCHECK(status == UserStatus::EMPTY);
-      return nullptr;
+      return {};
   }
 }
 }  // namespace
@@ -99,7 +98,7 @@ void UpholdWallet::OnGetUser(const type::Result result,
 
   if (result == type::Result::EXPIRED_TOKEN) {
     BLOG(0, "Access token expired!");
-    ledger_->uphold()->DisconnectWallet();
+    ledger_->uphold()->DisconnectWallet(notifications::kWalletDisconnected);
     // status == type::WalletStatus::NOT_CONNECTED ||
     // status == type::WalletStatus::DISCONNECTED_VERIFIED
     return callback(type::Result::EXPIRED_TOKEN);
@@ -112,12 +111,9 @@ void UpholdWallet::OnGetUser(const type::Result result,
 
   if (user.bat_not_allowed) {
     BLOG(0, "BAT is not allowed for the user!");
-    ledger_->uphold()->DisconnectWallet();
+    ledger_->uphold()->DisconnectWallet(notifications::kBATNotAllowedForUser);
     // status == type::WalletStatus::NOT_CONNECTED ||
     // status == type::WalletStatus::DISCONNECTED_VERIFIED
-
-    ledger_->ledger_client()->ShowNotification(
-        notifications::kBATNotAllowedForUser, {}, [](type::Result) {});
 
     return callback(type::Result::BAT_NOT_ALLOWED);
   }
@@ -129,14 +125,19 @@ void UpholdWallet::OnGetUser(const type::Result result,
   }
 
   if (user.status != UserStatus::OK || !user.verified) {
-    if (uphold_wallet->status == type::WalletStatus::VERIFIED) {
-      ledger_->uphold()->DisconnectWallet();
-    }
+    const auto notification =
+        GetNotificationForUserStatus(user.status, user.verified);
 
-    if (const char* const notification =
-            GetNotificationForUserStatus(user.status, user.verified)) {
-      ledger_->ledger_client()->ShowNotification(notification, {},
-                                                 [](type::Result) {});
+    if (uphold_wallet->status == type::WalletStatus::VERIFIED) {
+      ledger_->uphold()->DisconnectWallet(
+          !notification.empty() ? notification
+                                : notifications::kWalletDisconnected);
+      // status == type::WalletStatus::DISCONNECTED_VERIFIED
+    } else {
+      if (!notification.empty()) {
+        ledger_->ledger_client()->ShowNotification(notification, {},
+                                                   [](type::Result) {});
+      }
     }
 
     return callback(type::Result::LEDGER_OK);
@@ -169,7 +170,7 @@ void UpholdWallet::OnCreateCard(const type::Result result,
 
   if (result == type::Result::EXPIRED_TOKEN) {
     BLOG(0, "Access token expired!");
-    ledger_->uphold()->DisconnectWallet();
+    ledger_->uphold()->DisconnectWallet(notifications::kWalletDisconnected);
     // status == type::WalletStatus::NOT_CONNECTED
     return callback(type::Result::EXPIRED_TOKEN);
   }
@@ -271,15 +272,13 @@ void UpholdWallet::OnLinkWallet(const type::Result result,
   DCHECK(!id.empty());
 
   if (result == type::Result::ALREADY_EXISTS) {
-    ledger_->uphold()->DisconnectWallet();
+    ledger_->uphold()->DisconnectWallet(
+        notifications::kWalletDeviceLimitReached);
     // status == type::WalletStatus::NOT_CONNECTED
 
     ledger_->database()->SaveEventLog(
         log::kDeviceLimitReached,
         constant::kWalletUphold + std::string{"/"} + id.substr(0, 5));
-
-    ledger_->ledger_client()->ShowNotification(
-        notifications::kWalletDeviceLimitReached, {}, [](type::Result) {});
 
     return callback(type::Result::ALREADY_EXISTS);
   }

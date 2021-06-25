@@ -24,6 +24,7 @@ const char kPendingUser[] = "pending_user";
 const char kRestrictedUser[] = "restricted_user";
 const char kUnverifiedUser[] = "unverified_user";
 const char kWalletDeviceLimitReached[] = "wallet_device_limit_reached";
+const char kWalletDisconnected[] = "wallet_disconnected";
 }
 
 const char kUrlStaging[] = "https://wallet-sandbox.uphold.com";
