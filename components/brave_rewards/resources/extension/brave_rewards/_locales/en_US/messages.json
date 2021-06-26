@@ -219,64 +219,64 @@
     "message": "Please backup your Brave wallet.",
     "description": "Description for backup wallet notification"
   },
-  "batNotAllowedForUserLearnMore": {
+  "upholdBATNotAllowedForUserLearnMore": {
     "message": "Learn More",
     "description": "Notification button text to learn more about why BAT is not allowed for user"
   },
-  "batNotAllowedForUserTitle": {
-    "message": "BAT not allowed for user.",
+  "upholdBATNotAllowedForUserTitle": {
+    "message": "Error: BAT unavailable",
     "description": "Title for BAT not allowed for user notification"
   },
-  "batNotAllowedForUserNotification": {
-    "message": "Uphold reported that BAT is not available in your region yet. :(",
+  "upholdBATNotAllowedForUserNotification": {
+    "message": "BAT is not yet supported in your region on Uphold.",
     "description": "Description for BAT not allowed for user notification"
   },
-  "blockedUserLearnMore": {
+  "upholdBlockedUserLearnMore": {
     "message": "Learn More",
     "description": "Notification button text to learn more about the blocked user status"
   },
-  "blockedUserTitle": {
-    "message": "Blocked user.",
+  "upholdBlockedUserTitle": {
+    "message": "Error: Blocked account",
     "description": "Title for blocked user notification"
   },
-  "blockedUserNotification": {
-    "message": "Your account is blocked on Uphold's end.",
+  "upholdBlockedUserNotification": {
+    "message": "Your account at Uphold is currently blocked.",
     "description": "Description for blocked user notification"
   },
-  "pendingUserLearnMore": {
+  "upholdPendingUserLearnMore": {
     "message": "Learn More",
     "description": "Notification button text to learn more about the pending user status"
   },
-  "pendingUserTitle": {
-    "message": "Pending user.",
+  "upholdPendingUserTitle": {
+    "message": "Error: Pending",
     "description": "Title for pending user notification"
   },
-  "pendingUserNotification": {
-    "message": "Your account is pending on Uphold's end.",
+  "upholdPendingUserNotification": {
+    "message": "Your account at Uphold is still pending.",
     "description": "Description for pending user notification"
   },
-  "restrictedUserLearnMore": {
+  "upholdRestrictedUserLearnMore": {
     "message": "Learn More",
     "description": "Notification button text to learn more about the restricted user status"
   },
-  "restrictedUserTitle": {
-    "message": "Restricted user.",
+  "upholdRestrictedUserTitle": {
+    "message": "Error: Restricted account",
     "description": "Title for restricted user notification"
   },
-  "restrictedUserNotification": {
-    "message": "Your account is restricted on Uphold's end.",
+  "upholdRestrictedUserNotification": {
+    "message": "Your account at Uphold is currently restricted.",
     "description": "Description for restricted user notification"
   },
-  "unverifiedUserLearnMore": {
+  "upholdUnverifiedUserLearnMore": {
     "message": "Learn More",
     "description": "Notification button text to learn more about the membership process"
   },
-  "unverifiedUserTitle": {
-    "message": "Unverified user.",
+  "upholdUnverifiedUserTitle": {
+    "message": "Error: Unverified account",
     "description": "Title for unverified user notification"
   },
-  "unverifiedUserNotification": {
-    "message": "You haven't completed the membership process on Uphold's end.",
+  "upholdUnverifiedUserNotification": {
+    "message": "Your Uphold account is still not fully verified on Uphold.",
     "description": "Description for unverified user notification"
   },
   "deviceLimitReachedLearnMore": {

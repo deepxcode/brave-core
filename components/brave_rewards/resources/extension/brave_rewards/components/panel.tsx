@@ -202,35 +202,35 @@ export class Panel extends React.Component<Props, State> {
     this.actions.deleteNotification(id)
   }
   
-  onBATNotAllowedForUser = (id: string) => {
+  onUpholdBATNotAllowedForUser = (id: string) => {
     chrome.tabs.create({
       url: 'https://uphold.com/en/developer/api/documentation/#currencies'
     })
     this.actions.deleteNotification(id)
   }
   
-  onBlockedUser = (id: string) => {
+  onUpholdBlockedUser = (id: string) => {
     chrome.tabs.create({
       url: 'https://support.uphold.com/hc/en-us/articles/360045765351-Why-we-block-or-restrict-accounts-and-how-to-reduce-the-risk'
     })
     this.actions.deleteNotification(id)
   }
   
-  onPendingUser = (id: string) => {
+  onUpholdPendingUser = (id: string) => {
     chrome.tabs.create({
       url: 'https://support.uphold.com/hc/en-us/articles/206695986-How-do-I-sign-up-for-Uphold-Web-'
     })
     this.actions.deleteNotification(id)
   }
   
-  onRestrictedUser = (id: string) => {
+  onUpholdRestrictedUser = (id: string) => {
     chrome.tabs.create({
       url: 'https://support.uphold.com/hc/en-us/articles/360045765351-Why-we-block-or-restrict-accounts-and-how-to-reduce-the-risk'
     })
     this.actions.deleteNotification(id)
   }
   
-  onUnverifiedUser = (id: string) => {
+  onUpholdUnverifiedUser = (id: string) => {
     chrome.tabs.create({
       url: 'https://support.uphold.com/hc/en-us/articles/202766795-Here-s-how-to-verify-your-identity-it-s-easy'
     })
@@ -382,20 +382,20 @@ export class Panel extends React.Component<Props, State> {
       case 'deviceLimitReached':
         clickEvent = this.onDeviceLimitReached.bind(this, id)
         break
-      case 'batNotAllowedForUser':
-        clickEvent = this.onBATNotAllowedForUser.bind(this, id)
+      case 'upholdBATNotAllowedForUser':
+        clickEvent = this.onUpholdBATNotAllowedForUser.bind(this, id)
         break
-      case 'blockedUser':
-        clickEvent = this.onBlockedUser.bind(this, id)
+      case 'upholdBlockedUser':
+        clickEvent = this.onUpholdBlockedUser.bind(this, id)
         break
-      case 'pendingUser':
-        clickEvent = this.onPendingUser.bind(this, id)
+      case 'upholdPendingUser':
+        clickEvent = this.onUpholdPendingUser.bind(this, id)
         break
-      case 'restrictedUser':
-        clickEvent = this.onRestrictedUser.bind(this, id)
+      case 'upholdRestrictedUser':
+        clickEvent = this.onUpholdRestrictedUser.bind(this, id)
         break
-      case 'unverifiedUser':
-        clickEvent = this.onUnverifiedUser.bind(this, id)
+      case 'upholdUnverifiedUser':
+        clickEvent = this.onUpholdUnverifiedUser.bind(this, id)
         break
       default:
         clickEvent = undefined
@@ -524,25 +524,25 @@ export class Panel extends React.Component<Props, State> {
             type = 'deviceLimitReached'
             text = getMessage('deviceLimitReachedNotification')
             break
-          case 'bat_not_allowed_for_user':
-            type = 'batNotAllowedForUser'
-            text = getMessage('batNotAllowedForUserNotification')
+          case 'uphold_bat_not_allowed_for_user':
+            type = 'upholdBATNotAllowedForUser'
+            text = getMessage('upholdBATNotAllowedForUserNotification')
             break
-          case 'blocked_user':
-            type = 'blockedUser'
-            text = getMessage('blockedUserNotification')
+          case 'uphold_blocked_user':
+            type = 'upholdBlockedUser'
+            text = getMessage('upholdBlockedUserNotification')
             break
-          case 'pending_user':
-            type = 'pendingUser'
-            text = getMessage('pendingUserNotification')
+          case 'uphold_pending_user':
+            type = 'upholdPendingUser'
+            text = getMessage('upholdPendingUserNotification')
             break
-          case 'restricted_user':
-            type = 'restrictedUser'
-            text = getMessage('restrictedUserNotification')
+          case 'uphold_restricted_user':
+            type = 'upholdRestrictedUser'
+            text = getMessage('upholdRestrictedUserNotification')
             break
-          case 'unverified_user':
-            type = 'unverifiedUser'
-            text = getMessage('unverifiedUserNotification')
+          case 'uphold_unverified_user':
+            type = 'upholdUnverifiedUser'
+            text = getMessage('upholdUnverifiedUserNotification')
             break
           default:
             break

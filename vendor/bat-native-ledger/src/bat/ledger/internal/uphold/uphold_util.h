@@ -18,11 +18,11 @@ class LedgerImpl;
 namespace uphold {
 
 namespace notifications {
-const char kBATNotAllowedForUser[] = "bat_not_allowed_for_user";
-const char kBlockedUser[] = "blocked_user";
-const char kPendingUser[] = "pending_user";
-const char kRestrictedUser[] = "restricted_user";
-const char kUnverifiedUser[] = "unverified_user";
+const char kBATNotAllowedForUser[] = "uphold_bat_not_allowed_for_user";
+const char kBlockedUser[] = "uphold_blocked_user";
+const char kPendingUser[] = "uphold_pending_user";
+const char kRestrictedUser[] = "uphold_restricted_user";
+const char kUnverifiedUser[] = "uphold_unverified_user";
 const char kWalletDeviceLimitReached[] = "wallet_device_limit_reached";
 const char kWalletDisconnected[] = "wallet_disconnected";
 }
