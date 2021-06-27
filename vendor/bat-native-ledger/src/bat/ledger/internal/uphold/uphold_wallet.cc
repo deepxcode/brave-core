@@ -98,9 +98,8 @@ void UpholdWallet::OnGetUser(const type::Result result,
 
   if (result == type::Result::EXPIRED_TOKEN) {
     BLOG(0, "Access token expired!");
+    // Entering NOT_CONNECTED or DISCONNECTED_VERIFIED.
     ledger_->uphold()->DisconnectWallet(notifications::kWalletDisconnected);
-    // status == type::WalletStatus::NOT_CONNECTED ||
-    // status == type::WalletStatus::DISCONNECTED_VERIFIED
     return callback(type::Result::EXPIRED_TOKEN);
   }
 
@@ -111,10 +110,8 @@ void UpholdWallet::OnGetUser(const type::Result result,
 
   if (user.bat_not_allowed) {
     BLOG(0, "BAT is not allowed for the user!");
+    // Entering NOT_CONNECTED or DISCONNECTED_VERIFIED.
     ledger_->uphold()->DisconnectWallet(notifications::kBATNotAllowedForUser);
-    // status == type::WalletStatus::NOT_CONNECTED ||
-    // status == type::WalletStatus::DISCONNECTED_VERIFIED
-
     return callback(type::Result::BAT_NOT_ALLOWED);
   }
 
@@ -129,10 +126,10 @@ void UpholdWallet::OnGetUser(const type::Result result,
         GetNotificationForUserStatus(user.status, user.verified);
 
     if (uphold_wallet->status == type::WalletStatus::VERIFIED) {
+      // Entering DISCONNECTED_VERIFIED.
       ledger_->uphold()->DisconnectWallet(
           !notification.empty() ? notification
                                 : notifications::kWalletDisconnected);
-      // status == type::WalletStatus::DISCONNECTED_VERIFIED
     } else {
       if (!notification.empty()) {
         ledger_->ledger_client()->ShowNotification(notification, {},
@@ -170,8 +167,8 @@ void UpholdWallet::OnCreateCard(const type::Result result,
 
   if (result == type::Result::EXPIRED_TOKEN) {
     BLOG(0, "Access token expired!");
+    // Entering NOT_CONNECTED.
     ledger_->uphold()->DisconnectWallet(notifications::kWalletDisconnected);
-    // status == type::WalletStatus::NOT_CONNECTED
     return callback(type::Result::EXPIRED_TOKEN);
   }
 
@@ -272,9 +269,9 @@ void UpholdWallet::OnLinkWallet(const type::Result result,
   DCHECK(!id.empty());
 
   if (result == type::Result::ALREADY_EXISTS) {
+    // Entering NOT_CONNECTED.
     ledger_->uphold()->DisconnectWallet(
         notifications::kWalletDeviceLimitReached);
-    // status == type::WalletStatus::NOT_CONNECTED
 
     ledger_->database()->SaveEventLog(
         log::kDeviceLimitReached,
