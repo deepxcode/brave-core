@@ -30,7 +30,7 @@ void UpholdCard::GetBATCardId(
     endpoint::uphold::GetCardsCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR, "");
   }
 
@@ -58,7 +58,7 @@ void UpholdCard::CreateBATCard(
     endpoint::uphold::PostCardsCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR, "");
   }
 
@@ -91,7 +91,7 @@ void UpholdCard::UpdateBATCardSettings(
     endpoint::uphold::PatchCardCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR);
   }
 

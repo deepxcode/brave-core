@@ -82,7 +82,7 @@ void UpholdWallet::OnGetUser(const type::Result result,
                              ledger::ResultCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR);
   }
 
@@ -157,7 +157,7 @@ void UpholdWallet::OnCreateCard(const type::Result result,
                                 ledger::ResultCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR);
   }
 
@@ -196,14 +196,14 @@ void UpholdWallet::GetAnonFunds(
     return callback(type::Result::LEDGER_OK, type::Balance::New());
   }
 
-  const auto brave_wallet = ledger_->wallet()->GetWallet();
-  if (!brave_wallet) {
-    BLOG(1, "The Brave wallet is null!");
+  const auto rewards_wallet = ledger_->wallet()->GetWallet();
+  if (!rewards_wallet) {
+    BLOG(1, "Rewards wallet is null!");
     ledger_->state()->SetFetchOldBalanceEnabled(false);
     return callback(type::Result::LEDGER_OK, type::Balance::New());
   }
 
-  if (brave_wallet->payment_id.empty()) {
+  if (rewards_wallet->payment_id.empty()) {
     BLOG(0, "Payment ID is empty!");
     return callback(type::Result::LEDGER_ERROR, nullptr);
   }
@@ -217,7 +217,7 @@ void UpholdWallet::OnGetAnonFunds(const type::Result result,
                                   ledger::ResultCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR);
   }
 
@@ -259,7 +259,7 @@ void UpholdWallet::OnLinkWallet(const type::Result result,
                                 ledger::ResultCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR);
   }
 
@@ -315,7 +315,7 @@ void UpholdWallet::OnTransferTokens(const type::Result result,
                                     ledger::ResultCallback callback) const {
   auto uphold_wallet = GetWallet(ledger_);
   if (!uphold_wallet) {
-    BLOG(0, "The Uphold wallet is null!");
+    BLOG(0, "Uphold wallet is null!");
     return callback(type::Result::LEDGER_ERROR);
   }
 
