@@ -7,7 +7,6 @@
 
 #include "bat/ledger/internal/endpoint/uphold/uphold_server.h"
 #include "bat/ledger/internal/ledger_impl.h"
-#include "bat/ledger/internal/uphold/uphold_update_card.h"
 #include "bat/ledger/internal/uphold/uphold_util.h"
 
 using std::placeholders::_1;
@@ -95,13 +94,8 @@ void UpholdCard::UpdateBATCardSettings(
     return callback(type::Result::LEDGER_ERROR);
   }
 
-  UpdateCard card{};
-  card.starred = true;
-  card.position = 1;
-
   DCHECK(!id.empty());
-  uphold_server_->patch_card()->Request(uphold_wallet->token, id, card,
-                                        callback);
+  uphold_server_->patch_card()->Request(uphold_wallet->token, id, callback);
 }
 
 void UpholdCard::OnUpdateBATCardSettings(const type::Result result,
