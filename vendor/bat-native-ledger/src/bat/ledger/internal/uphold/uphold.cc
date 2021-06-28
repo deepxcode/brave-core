@@ -179,17 +179,14 @@ void Uphold::DisconnectWallet(const std::string& notification) {
 
   const bool manual = notification.empty();
 
-  const auto from_status = wallet->status;
+  const auto from = wallet->status;
   wallet = ResetWallet(std::move(wallet));
   if (manual) {
     wallet->status = type::WalletStatus::NOT_CONNECTED;
   }
-  const auto to_status = wallet->status;
+  const auto to = wallet->status;
 
-  ledger_->database()->SaveEventLog(
-      log::kWalletStatusChange, (std::ostringstream{} << from_status).str() +
-                                    " ==> " +
-                                    (std::ostringstream{} << to_status).str());
+  LogWalletStatusChange(ledger_, from, to);
 
   const bool shutting_down = ledger_->IsShuttingDown();
 
