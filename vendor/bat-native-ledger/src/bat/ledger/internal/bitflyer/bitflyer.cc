@@ -18,6 +18,7 @@
 #include "bat/ledger/internal/endpoint/bitflyer/bitflyer_server.h"
 #include "bat/ledger/internal/ledger_impl.h"
 #include "bat/ledger/internal/logging/event_log_keys.h"
+#include "bat/ledger/internal/notifications/notification_keys.h"
 #include "brave_base/random.h"
 
 using std::placeholders::_1;
@@ -176,8 +177,8 @@ void Bitflyer::DisconnectWallet(const bool manual) {
   const bool shutting_down = ledger_->IsShuttingDown();
 
   if (!manual && !shutting_down) {
-    ledger_->ledger_client()->ShowNotification("wallet_disconnected", {},
-                                               [](type::Result _) {});
+    ledger_->ledger_client()->ShowNotification(
+        ledger::notifications::kWalletDisconnected, {}, [](type::Result _) {});
   }
 
   SetWallet(wallet->Clone());
