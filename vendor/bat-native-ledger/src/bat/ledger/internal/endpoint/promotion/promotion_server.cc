@@ -23,6 +23,8 @@ PromotionServer::PromotionServer(LedgerImpl* ledger)
       post_claim_bitflyer_(
           std::make_unique<promotion::PostClaimBitflyer>(ledger)),
       post_claim_uphold_(std::make_unique<promotion::PostClaimUphold>(ledger)),
+      get_wallet_(
+          std::make_unique<promotion::GetWallet>(ledger)),
       get_wallet_balance_(
           std::make_unique<promotion::GetWalletBalance>(ledger)),
       post_captcha_(std::make_unique<promotion::PostCaptcha>(ledger)),
@@ -74,6 +76,10 @@ promotion::PostClaimBitflyer* PromotionServer::post_claim_bitflyer() const {
 
 promotion::PostClaimUphold* PromotionServer::post_claim_uphold() const {
   return post_claim_uphold_.get();
+}
+
+promotion::GetWallet* PromotionServer::get_wallet() const {
+  return get_wallet_.get();
 }
 
 promotion::GetWalletBalance* PromotionServer::get_wallet_balance() const {
