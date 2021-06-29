@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVELEDGER_ENDPOINT_PROMOTION_GET_WALLET_GET_WALLET_H_
-#define BRAVELEDGER_ENDPOINT_PROMOTION_GET_WALLET_GET_WALLET_H_
+#ifndef BRAVE_VENDOR_BAT_NATIVE_LEDGER_SRC_BAT_LEDGER_INTERNAL_ENDPOINT_PROMOTION_GET_WALLET_GET_WALLET_H_
+#define BRAVE_VENDOR_BAT_NATIVE_LEDGER_SRC_BAT_LEDGER_INTERNAL_ENDPOINT_PROMOTION_GET_WALLET_GET_WALLET_H_
 
 #include <string>
 
@@ -59,7 +59,7 @@ class GetWallet {
 
   type::Result CheckStatusCode(int status_code) const;
 
-  type::Result ParseBody(const std::string& body, bool& linked) const;
+  type::Result ParseBody(const std::string& body, bool* linked) const;
 
   LedgerImpl* ledger_;  // NOT OWNED
 };
@@ -68,4 +68,4 @@ class GetWallet {
 }  // namespace endpoint
 }  // namespace ledger
 
-#endif  // BRAVELEDGER_ENDPOINT_PROMOTION_GET_WALLET_GET_WALLET_H_
+#endif  // BRAVE_VENDOR_BAT_NATIVE_LEDGER_SRC_BAT_LEDGER_INTERNAL_ENDPOINT_PROMOTION_GET_WALLET_GET_WALLET_H_

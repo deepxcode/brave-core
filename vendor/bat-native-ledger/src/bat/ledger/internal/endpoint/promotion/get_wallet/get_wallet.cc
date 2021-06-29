@@ -5,6 +5,8 @@
 
 #include "bat/ledger/internal/endpoint/promotion/get_wallet/get_wallet.h"
 
+#include <utility>
+
 #include "base/json/json_reader.h"
 #include "bat/ledger/internal/endpoint/promotion/promotions_util.h"
 #include "bat/ledger/internal/ledger_impl.h"
@@ -49,7 +51,7 @@ void GetWallet::OnRequest(const type::UrlResponse& response,
   }
 
   bool linked{};
-  result = ParseBody(response.body, linked);
+  result = ParseBody(response.body, &linked);
   callback(result, linked);
 }
 
@@ -72,7 +74,9 @@ type::Result GetWallet::CheckStatusCode(int status_code) const {
   return type::Result::LEDGER_OK;
 }
 
-type::Result GetWallet::ParseBody(const std::string& body, bool& linked) const {
+type::Result GetWallet::ParseBody(const std::string& body, bool* linked) const {
+  DCHECK(linked);
+
   base::Optional<base::Value> value = base::JSONReader::Read(body);
   if (!value || !value->is_dict()) {
     BLOG(0, "Invalid JSON");
@@ -92,7 +96,7 @@ type::Result GetWallet::ParseBody(const std::string& body, bool& linked) const {
     return type::Result::LEDGER_ERROR;
   }
 
-  linked = !linking_id->empty();
+  *linked = !linking_id->empty();
 
   return type::Result::LEDGER_OK;
 }

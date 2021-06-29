@@ -10,6 +10,7 @@
 #include <string>
 
 #include "bat/ledger/internal/state/state_migration_v1.h"
+#include "bat/ledger/internal/state/state_migration_v10.h"
 #include "bat/ledger/internal/state/state_migration_v2.h"
 #include "bat/ledger/internal/state/state_migration_v3.h"
 #include "bat/ledger/internal/state/state_migration_v4.h"
@@ -18,7 +19,6 @@
 #include "bat/ledger/internal/state/state_migration_v7.h"
 #include "bat/ledger/internal/state/state_migration_v8.h"
 #include "bat/ledger/internal/state/state_migration_v9.h"
-#include "bat/ledger/internal/state/state_migration_v10.h"
 #include "bat/ledger/ledger.h"
 
 namespace ledger {
