@@ -40,6 +40,14 @@ void StateMigrationV10::Migrate(ledger::ResultCallback callback) {
       uphold_wallet->address = {};
       break;
     case type::WalletStatus::VERIFIED:
+      if (uphold_wallet->token.empty() || uphold_wallet->address.empty()) {
+        uphold_wallet->status = !uphold_wallet->token.empty()
+                                    ? type::WalletStatus::PENDING
+                                    : type::WalletStatus::DISCONNECTED_VERIFIED;
+        uphold_wallet->address = {};
+        break;
+      }
+
       return get_wallet_->Request(
           std::bind(&StateMigrationV10::OnGetWallet, this, _1, _2, callback));
     case type::WalletStatus::DISCONNECTED_NOT_VERIFIED:
@@ -77,16 +85,15 @@ void StateMigrationV10::OnGetWallet(type::Result result,
   }
 
   DCHECK(uphold_wallet->status == type::WalletStatus::VERIFIED);
+  DCHECK(!uphold_wallet->token.empty());
+  DCHECK(!uphold_wallet->address.empty());
 
-  if (result == type::Result::LEDGER_OK && linked) {
-    return callback(type::Result::LEDGER_OK);
+  if (result != type::Result::LEDGER_OK ||
+      !linked) {  // deemed semi-VERIFIED || semi-VERIFIED
+    uphold_wallet->status = type::WalletStatus::PENDING;
+    uphold_wallet->address = {};
   }
 
-  // deemed semi-VERIFIED || semi-VERIFIED
-  uphold_wallet->status = !uphold_wallet->token.empty()
-                              ? type::WalletStatus::PENDING
-                              : type::WalletStatus::NOT_CONNECTED;
-  uphold_wallet->address = {};
   uphold_wallet = ledger::uphold::GenerateLinks(std::move(uphold_wallet));
   callback(ledger_->uphold()->SetWallet(std::move(uphold_wallet))
                ? type::Result::LEDGER_OK
