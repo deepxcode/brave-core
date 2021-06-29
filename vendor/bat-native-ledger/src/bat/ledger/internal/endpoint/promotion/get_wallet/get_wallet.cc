@@ -2,10 +2,10 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 #include "bat/ledger/internal/endpoint/promotion/get_wallet/get_wallet.h"
 
 #include "base/json/json_reader.h"
-#include "base/strings/stringprintf.h"
 #include "bat/ledger/internal/endpoint/promotion/promotions_util.h"
 #include "bat/ledger/internal/ledger_impl.h"
 #include "net/http/http_status_code.h"
@@ -36,8 +36,7 @@ std::string GetWallet::GetUrl() const {
     return {};
   }
 
-  return GetServerUrl(
-      base::StringPrintf("/v3/wallet/%s", rewards_wallet->payment_id.c_str()));
+  return GetServerUrl("/v3/wallet/" + rewards_wallet->payment_id);
 }
 
 void GetWallet::OnRequest(const type::UrlResponse& response,
