@@ -1295,6 +1295,24 @@ void RewardsServiceImpl::OnRecoverWallet(const ledger::type::Result result) {
   }
 }
 
+std::vector<std::string> RewardsServiceImpl::GetExternalWalletProviders() {
+  std::vector<std::string> providers;
+
+  if (IsBitFlyerRegion()) {
+    providers.push_back(ledger::constant::kWalletBitflyer);
+    return providers;
+  }
+
+  providers.push_back(ledger::constant::kWalletUphold);
+
+#if !defined(OS_ANDROID)
+  if (base::FeatureList::IsEnabled(features::kGeminiFeature)) {
+    providers.push_back(ledger::constant::kWalletGemini);
+  }
+#endif
+  return providers;
+}
+
 void RewardsServiceImpl::AttestPromotion(
     const std::string& promotion_id,
     const std::string& solution,
@@ -2883,7 +2901,8 @@ void RewardsServiceImpl::ProcessRewardsPageUrl(
 
   if (action == "authorization") {
     if (wallet_type == ledger::constant::kWalletUphold ||
-        wallet_type == ledger::constant::kWalletBitflyer) {
+        wallet_type == ledger::constant::kWalletBitflyer ||
+        wallet_type == ledger::constant::kWalletGemini) {
       ExternalWalletAuthorization(
           wallet_type,
           query_map,
@@ -3415,7 +3434,7 @@ void RewardsServiceImpl::OnWalletCreatedForSetAdsEnabled(
   }
 }
 
-std::string RewardsServiceImpl::GetExternalWalletType() const {
+bool RewardsServiceImpl::IsBitFlyerRegion() const {
   int32_t current_country = country_id_;
 
   if (!current_country) {
@@ -3429,11 +3448,25 @@ std::string RewardsServiceImpl::GetExternalWalletType() const {
           country_codes::CountryCharsToCountryID(country.at(0), country.at(1));
 
       if (id == current_country)
-        return ledger::constant::kWalletBitflyer;
+        return true;
     }
   }
+  return false;
+}
 
+std::string RewardsServiceImpl::GetExternalWalletType() const {
+  if (IsBitFlyerRegion()) {
+    return ledger::constant::kWalletBitflyer;
+  }
+#if defined(OS_ANDROID)
   return ledger::constant::kWalletUphold;
+#endif
+
+  return profile_->GetPrefs()->GetString(prefs::kExternalWalletType);
+}
+
+void RewardsServiceImpl::SetExternalWalletType(const std::string wallet_type) {
+  profile_->GetPrefs()->SetString(prefs::kExternalWalletType, wallet_type);
 }
 
 }  // namespace brave_rewards

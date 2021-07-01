@@ -238,6 +238,8 @@ class MockRewardsService : public RewardsService {
                void(brave_rewards::GetWalletPassphraseCallback));
 
   MOCK_METHOD1(SetAdsEnabled, void(const bool is_enabled));
+  MOCK_METHOD0(GetExternalWalletProviders, std::vector<std::string>());
+  MOCK_METHOD1(SetExternalWalletType, void(const std::string));
 
   MOCK_CONST_METHOD0(IsRewardsEnabled, bool());
 };
