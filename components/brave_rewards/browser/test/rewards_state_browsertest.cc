@@ -498,7 +498,7 @@ INSTANTIATE_TEST_SUITE_P(
                 R"("verify_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc",)"
                 R"("withdraw_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc"})"}),
         // NOLINTNEXTLINE
-        std::make_pair(  // NOT_CONNECTED_token_empty_address_non_empty__NOT_CONNECTED_token_empty_address_empty
+        std::make_pair(  // CONNECTED_token_empty_address_non_empty__NOT_CONNECTED_token_empty_address_empty
             std::string{
                 R"({"account_url":"",)"
                 R"("add_url":"",)"
@@ -524,7 +524,7 @@ INSTANTIATE_TEST_SUITE_P(
                 R"("verify_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=kyc&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
                 R"("withdraw_url":""})"}),
         // NOLINTNEXTLINE
-        std::make_pair(  // NOT_CONNECTED_token_non_empty_address_non_empty__NOT_CONNECTED_token_empty_address_empty
+        std::make_pair(  // CONNECTED_token_non_empty_address_non_empty__NOT_CONNECTED_token_empty_address_empty
             std::string{
                 R"({"account_url":"",)"
                 R"("add_url":"",)"
@@ -756,7 +756,111 @@ INSTANTIATE_TEST_SUITE_P(
                 R"("token":"",)"
                 R"("user_name":"",)"
                 R"("verify_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=kyc&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
-                R"("withdraw_url":""})"})),
+                R"("withdraw_url":""})"}),
+        // NOLINTNEXTLINE
+        std::make_pair(  // PENDING_token_empty_address_empty__NOT_CONNECTED_token_empty_address_empty
+            std::string{
+                R"({"account_url":"",)"
+                R"("add_url":"",)"
+                R"("address":"",)"
+                R"("fees":{},)"
+                R"("login_url":"",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":5,)"
+                R"("token":"",)"
+                R"("user_name":"",)"
+                R"("verify_url":"",)"
+                R"("withdraw_url":""})"},
+            std::string{
+                R"({"account_url":"https://wallet-sandbox.uphold.com/dashboard",)"
+                R"("add_url":"",)"
+                R"("address":"",)"
+                R"("fees":{},)"
+                R"("login_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=login&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":0,)"
+                R"("token":"",)"
+                R"("user_name":"",)"
+                R"("verify_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=kyc&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("withdraw_url":""})"}),
+        // NOLINTNEXTLINE
+        std::make_pair(  // PENDING_token_non_empty_address_empty__NOT_CONNECTED_token_empty_address_empty
+            std::string{
+                R"({"account_url":"",)"
+                R"("add_url":"",)"
+                R"("address":"",)"
+                R"("fees":{},)"
+                R"("login_url":"",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":5,)"
+                R"("token":"0047c2fd8f023e067354dbdb5639ee67acf77150",)"
+                R"("user_name":"",)"
+                R"("verify_url":"",)"
+                R"("withdraw_url":""})"},
+            std::string{
+                R"({"account_url":"https://wallet-sandbox.uphold.com/dashboard",)"
+                R"("add_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc",)"
+                R"("address":"",)"
+                R"("fees":{},)"
+                R"("login_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=login&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":5,)"
+                R"("token":"0047c2fd8f023e067354dbdb5639ee67acf77150",)"
+                R"("user_name":"",)"
+                R"("verify_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc",)"
+                R"("withdraw_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc"})"}),
+        // NOLINTNEXTLINE
+        std::make_pair(  // PENDING_token_empty_address_non_empty__NOT_CONNECTED_token_empty_address_empty
+            std::string{
+                R"({"account_url":"",)"
+                R"("add_url":"",)"
+                R"("address":"962df5b1-bb72-4619-a349-c8087941b795",)"
+                R"("fees":{},)"
+                R"("login_url":"",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":5,)"
+                R"("token":"",)"
+                R"("user_name":"",)"
+                R"("verify_url":"",)"
+                R"("withdraw_url":""})"},
+            std::string{
+                R"({"account_url":"https://wallet-sandbox.uphold.com/dashboard",)"
+                R"("add_url":"",)"
+                R"("address":"",)"
+                R"("fees":{},)"
+                R"("login_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=login&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":0,)"
+                R"("token":"",)"
+                R"("user_name":"",)"
+                R"("verify_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=kyc&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("withdraw_url":""})"}),
+        // NOLINTNEXTLINE
+        std::make_pair(  // PENDING_token_non_empty_address_non_empty__NOT_CONNECTED_token_empty_address_empty
+            std::string{
+                R"({"account_url":"",)"
+                R"("add_url":"",)"
+                R"("address":"962df5b1-bb72-4619-a349-c8087941b795",)"
+                R"("fees":{},)"
+                R"("login_url":"",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":5,)"
+                R"("token":"0047c2fd8f023e067354dbdb5639ee67acf77150",)"
+                R"("user_name":"",)"
+                R"("verify_url":"",)"
+                R"("withdraw_url":""})"},
+            std::string{
+                R"({"account_url":"https://wallet-sandbox.uphold.com/dashboard",)"
+                R"("add_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc",)"
+                R"("address":"",)"
+                R"("fees":{},)"
+                R"("login_url":"https://wallet-sandbox.uphold.com/authorize/4c2b665ca060d912fec5c735c734859a06118cc8?scope=accounts:read accounts:write cards:read cards:write user:read transactions:deposit transactions:read transactions:transfer:application transactions:transfer:others&intention=login&state=49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("one_time_string":"49E52DEFFC7C3309C8BF807FB8E838911362837961464845DCF1E58B50886D3C",)"
+                R"("status":5,)"
+                R"("token":"0047c2fd8f023e067354dbdb5639ee67acf77150",)"
+                R"("user_name":"",)"
+                R"("verify_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc",)"
+                R"("withdraw_url":"https://wallet-sandbox.uphold.com/signup/step2?application_id=4c2b665ca060d912fec5c735c734859a06118cc8&intention=kyc"})"})),
     UpholdStateMachine::NameSuffixGenerator);
 
 IN_PROC_BROWSER_TEST_P_(UpholdStateMachine, Migration) {
