@@ -345,6 +345,7 @@ class UpholdStateMachine : public RewardsStateBrowserTest,
 #define _UPHOLD_URL_ "https://wallet-sandbox.uphold.com"
 #endif
 
+// clang-format off
 INSTANTIATE_TEST_SUITE_P(
     RewardsStateBrowserTest,
     UpholdStateMachine,
@@ -974,6 +975,7 @@ INSTANTIATE_TEST_SUITE_P(
                 R"("verify_url":")" _UPHOLD_URL_ R"(/signup/step2?application_id=)" _UPHOLD_CLIENT_ID_ R"(&intention=kyc",)"
                 R"("withdraw_url":")" _UPHOLD_URL_ R"(/signup/step2?application_id=)" _UPHOLD_CLIENT_ID_ R"(&intention=kyc"})"})),
     UpholdStateMachine::NameSuffixGenerator);
+// clang-format on
 
 IN_PROC_BROWSER_TEST_P_(UpholdStateMachine, Migration) {
   const auto& params = GetParam();
