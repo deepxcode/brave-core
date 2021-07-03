@@ -51,6 +51,7 @@ void BraveWalletService::RegisterProfilePrefs(PrefRegistrySimple* registry) {
   registry->RegisterBooleanPref(kShowWalletIconOnToolbar, true);
   registry->RegisterBooleanPref(kBraveWalletBackupComplete, false);
   registry->RegisterTimePref(kBraveWalletLastUnlockTime, base::Time());
+  registry->RegisterListPref(kBraveWalletAccountNames);
 }
 
 brave_wallet::EthJsonRpcController* BraveWalletService::rpc_controller() const {
@@ -72,6 +73,26 @@ brave_wallet::AssetRatioController* BraveWalletService::asset_ratio_controller()
 
 brave_wallet::SwapController* BraveWalletService::swap_controller() const {
   return swap_controller_.get();
+}
+
+std::vector<std::string> BraveWalletService::WalletAccountNames() const {
+  std::vector<std::string> account_names;
+  for (const auto& account_name_value :
+       prefs_->Get(kBraveWalletAccountNames)->GetList()) {
+    const std::string* account_name = account_name_value.GetIfString();
+    DCHECK(account_name) << "account name type should be string";
+    account_names.push_back(*account_name);
+  }
+  return account_names;
+}
+
+void BraveWalletService::UpdateAccountNames(
+    const std::vector<std::string>& account_names) {
+  std::vector<base::Value> account_names_list;
+  for (const std::string& name : account_names) {
+    account_names_list.push_back(base::Value(name));
+  }
+  prefs_->Set(kBraveWalletAccountNames, base::Value(account_names_list));
 }
 
 bool BraveWalletService::IsWalletBackedUp() const {
