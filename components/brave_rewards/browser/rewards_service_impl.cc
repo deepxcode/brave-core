@@ -3460,14 +3460,23 @@ std::string RewardsServiceImpl::GetExternalWalletType() const {
     return ledger::constant::kWalletBitflyer;
   }
 #if BUILDFLAG(ENABLE_GEMINI_WALLET)
-  return profile_->GetPrefs()->GetString(prefs::kExternalWalletType);
+  if (base::FeatureList::IsEnabled(features::kGeminiFeature)) {
+    return profile_->GetPrefs()->GetString(prefs::kExternalWalletType);
+  }
 #endif
 
   return ledger::constant::kWalletUphold;
 }
 
 void RewardsServiceImpl::SetExternalWalletType(const std::string wallet_type) {
-  profile_->GetPrefs()->SetString(prefs::kExternalWalletType, wallet_type);
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
+  const std::vector<std::string> providers = GetExternalWalletProviders();
+  if (base::FeatureList::IsEnabled(features::kGeminiFeature) &&
+      std::find(providers.begin(), providers.end(), wallet_type) !=
+          providers.end()) {
+    profile_->GetPrefs()->SetString(prefs::kExternalWalletType, wallet_type);
+  }
+#endif
 }
 
 }  // namespace brave_rewards
