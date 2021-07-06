@@ -192,8 +192,7 @@ TEST_F(GeminiUtilTest, GenerateLinks) {
   auto result = gemini::GenerateLinks(wallet->Clone());
   ASSERT_EQ(result->add_url, "");
   ASSERT_EQ(result->withdraw_url, "");
-  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL
-            "/register/verify");
+  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL "/register/verify");
   ASSERT_EQ(result->account_url, GEMINI_OAUTH_STAGING_URL);
 
   // Connected
@@ -201,8 +200,7 @@ TEST_F(GeminiUtilTest, GenerateLinks) {
   result = gemini::GenerateLinks(wallet->Clone());
   ASSERT_EQ(result->add_url, "");
   ASSERT_EQ(result->withdraw_url, "");
-  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL
-            "/register/verify");
+  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL "/register/verify");
   ASSERT_EQ(result->account_url, GEMINI_OAUTH_STAGING_URL);
 
   // Verified
@@ -210,8 +208,7 @@ TEST_F(GeminiUtilTest, GenerateLinks) {
   result = gemini::GenerateLinks(wallet->Clone());
   ASSERT_EQ(result->add_url, GEMINI_OAUTH_STAGING_URL);
   ASSERT_EQ(result->withdraw_url, GEMINI_OAUTH_STAGING_URL);
-  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL
-            "/register/verify");
+  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL "/register/verify");
   ASSERT_EQ(result->account_url, GEMINI_OAUTH_STAGING_URL);
 
   // Disconnected Non-Verified
@@ -219,8 +216,7 @@ TEST_F(GeminiUtilTest, GenerateLinks) {
   result = gemini::GenerateLinks(wallet->Clone());
   ASSERT_EQ(result->add_url, "");
   ASSERT_EQ(result->withdraw_url, "");
-  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL
-            "/register/verify");
+  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL "/register/verify");
   ASSERT_EQ(result->account_url, GEMINI_OAUTH_STAGING_URL);
 
   // Disconnected Verified
@@ -228,8 +224,7 @@ TEST_F(GeminiUtilTest, GenerateLinks) {
   result = gemini::GenerateLinks(wallet->Clone());
   ASSERT_EQ(result->add_url, "");
   ASSERT_EQ(result->withdraw_url, "");
-  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL
-            "/register/verify");
+  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL "/register/verify");
   ASSERT_EQ(result->account_url, GEMINI_OAUTH_STAGING_URL);
 
   // Pending
@@ -237,8 +232,7 @@ TEST_F(GeminiUtilTest, GenerateLinks) {
   result = gemini::GenerateLinks(wallet->Clone());
   ASSERT_EQ(result->add_url, "");
   ASSERT_EQ(result->withdraw_url, "");
-  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL
-            "/register/verify");
+  ASSERT_EQ(result->verify_url, GEMINI_OAUTH_STAGING_URL "/register/verify");
   ASSERT_EQ(result->account_url, GEMINI_OAUTH_STAGING_URL);
 }
 

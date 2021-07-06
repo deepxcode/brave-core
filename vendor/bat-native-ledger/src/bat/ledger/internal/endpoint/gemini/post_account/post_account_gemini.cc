@@ -142,8 +142,8 @@ void PostAccount::OnRequest(const type::UrlResponse& response,
   std::string user_name;
   bool verified;
 
-  result = ParseBody(response.body, &address, &linking_info, &user_name,
-                     &verified);
+  result =
+      ParseBody(response.body, &address, &linking_info, &user_name, &verified);
   callback(result, address, linking_info, user_name, verified);
 }
 

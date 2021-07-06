@@ -10,9 +10,8 @@
 namespace brave_rewards {
 namespace features {
 
-// Todo(@jumde) - Set to disabled by default before merge
 const base::Feature kGeminiFeature{"BraveRewardsGemini",
-                                   base::FEATURE_ENABLED_BY_DEFAULT};
+                                   base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kVerboseLoggingFeature{"BraveRewardsVerboseLogging",
                                            base::FEATURE_DISABLED_BY_DEFAULT};

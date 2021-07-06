@@ -73,9 +73,7 @@ std::string GetAuthorizeUrl(const std::string& state) {
 std::string GetVerifyUrl() {
   const std::string url = GetUrl();
 
-  return base::StringPrintf(
-      "%s/register/verify",
-      url.c_str());
+  return base::StringPrintf("%s/register/verify", url.c_str());
 }
 
 std::string GetAddUrl() {

@@ -173,7 +173,8 @@ void GeminiAuthorization::OnPostAccount(
   wallet_ptr->token = token;
   wallet_ptr->address = address;
   wallet_ptr->user_name = name;
-  wallet_ptr->status = verified ? type::WalletStatus::VERIFIED : type::WalletStatus::CONNECTED;
+  wallet_ptr->status =
+      verified ? type::WalletStatus::VERIFIED : type::WalletStatus::CONNECTED;
 
   ledger_->gemini()->SetWallet(wallet_ptr->Clone());
 
