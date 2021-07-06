@@ -350,6 +350,11 @@ class PageWallet extends React.Component<Props, State> {
       return
     }
 
+    if (externalWallet.status === 1) {
+      window.open(externalWallet.verifyUrl, '_self')
+      return
+    }
+
     this.onConnectWalletContinue()
   }
 

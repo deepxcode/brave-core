@@ -47,10 +47,12 @@ type::Result PostAccount::CheckStatusCode(const int status_code) {
 type::Result PostAccount::ParseBody(const std::string& body,
                                     std::string* address,
                                     std::string* linking_info,
-                                    std::string* user_name) {
+                                    std::string* user_name,
+                                    bool* verified) {
   DCHECK(address);
   DCHECK(linking_info);
   DCHECK(user_name);
+  DCHECK(verified);
 
   base::Optional<base::Value> value = base::JSONReader::Read(body);
   if (!value || !value->is_dict()) {
@@ -100,9 +102,16 @@ type::Result PostAccount::ParseBody(const std::string& body,
     return type::Result::LEDGER_ERROR;
   }
 
+  base::Optional<bool> is_verified = user_list[0].FindBoolKey("isVerified");
+  if (!verified) {
+    BLOG(0, "Missing isVerified flag");
+    return type::Result::LEDGER_ERROR;
+  }
+
   *address = *account_name;
   *linking_info = *linking_information;
   *user_name = *name;
+  *verified = *is_verified;
 
   return type::Result::LEDGER_OK;
 }
@@ -124,16 +133,18 @@ void PostAccount::OnRequest(const type::UrlResponse& response,
   type::Result result = CheckStatusCode(response.status_code);
 
   if (result != type::Result::LEDGER_OK) {
-    callback(result, "", "", "");
+    callback(result, "", "", "", false);
     return;
   }
 
   std::string linking_info;
   std::string address;
   std::string user_name;
+  bool verified;
 
-  result = ParseBody(response.body, &address, &linking_info, &user_name);
-  callback(result, address, linking_info, user_name);
+  result = ParseBody(response.body, &address, &linking_info, &user_name,
+                     &verified);
+  callback(result, address, linking_info, user_name, verified);
 }
 
 }  // namespace gemini

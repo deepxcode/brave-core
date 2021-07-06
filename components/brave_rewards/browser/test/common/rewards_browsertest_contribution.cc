@@ -454,8 +454,8 @@ void RewardsBrowserTestContribution::SetUpUpholdWallet(
     const double balance,
     const ledger::type::WalletStatus status) {
   DCHECK(rewards_service);
-  browser_->profile()->GetPrefs()->
-      SetString(brave_rewards::prefs::kExternalWalletType, "uphold");
+  browser_->profile()->GetPrefs()->SetString(
+      brave_rewards::prefs::kExternalWalletType, "uphold");
   // we need brave wallet as well
   rewards_browsertest_util::CreateWallet(rewards_service_);
 
