@@ -336,13 +336,13 @@ TEST_P(StateMachine, AuthorizationFlow) {
   const auto& expected_args = std::get<8>(params);
   const auto expected_status = std::get<9>(params);
 
-  auto uphold_wallet = uphold_wallet_1;
+  std::string uphold_wallet{};
 
   EXPECT_CALL(*mock_ledger_client_,
               GetEncryptedStringState(state::kWalletUphold))
       .Times(Between(1, 2))
-      .WillOnce(Return(uphold_wallet_1))
-      .WillOnce(Return(uphold_wallet_2));
+      .WillOnce([&] { return uphold_wallet = uphold_wallet_1; })
+      .WillOnce([&] { return uphold_wallet = uphold_wallet_2; });
 
   EXPECT_CALL(*mock_ledger_client_,
               SetEncryptedStringState(state::kWalletUphold, _))
@@ -374,9 +374,7 @@ TEST_P(StateMachine, AuthorizationFlow) {
       [&](type::Result result, base::flat_map<std::string, std::string> args) {
         ASSERT_EQ(result, expected_result);
         ASSERT_EQ(args, expected_args);
-        const auto status = StateMachine::GetStatusFromJSON(
-            uphold_wallet_1 != uphold_wallet_2 ? uphold_wallet_2
-                                               : uphold_wallet);
+        const auto status = StateMachine::GetStatusFromJSON(uphold_wallet);
         if (status && expected_status) {
           ASSERT_EQ(*status, *expected_status);
         } else {
