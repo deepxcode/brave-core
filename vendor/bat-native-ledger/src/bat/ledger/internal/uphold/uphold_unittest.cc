@@ -3,8 +3,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include <tuple>
 #include <utility>
 
+#include "base/json/json_reader.h"
 #include "base/test/task_environment.h"
 #include "bat/ledger/global_constants.h"
 #include "bat/ledger/internal/database/database_mock.h"
@@ -83,7 +85,8 @@ using ParamType = std::tuple<
     std::string,                               // Uphold wallet (2)
     bool,                                      // SetWallet() returns (2)
     type::Result,                              // expected result
-    base::flat_map<std::string, std::string>   // expected args
+    base::flat_map<std::string, std::string>,  // expected args
+    absl::optional<type::WalletStatus>         // expected status
 >;
 
 struct StateMachine : UpholdTest,
@@ -91,6 +94,21 @@ struct StateMachine : UpholdTest,
   static std::string NameSuffixGenerator(
       const TestParamInfo<StateMachine::ParamType>& info) {
     return std::get<0>(info.param);
+  }
+
+  static absl::optional<type::WalletStatus> GetStatusFromJSON(
+      const std::string& uphold_wallet) {
+    auto value = base::JSONReader::Read(uphold_wallet);
+    if (value && value->is_dict()) {
+      base::DictionaryValue* dictionary = nullptr;
+      if (value->GetAsDictionary(&dictionary)) {
+        if (auto status = dictionary->FindIntKey("status")) {
+          return static_cast<type::WalletStatus>(*status);
+        }
+      }
+    }
+
+    return {};
   }
 };
 
@@ -107,6 +125,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       false,
       type::Result::LEDGER_ERROR,
+      {},
       {}
     },
     ParamType{  // Attempting to re-authorize in VERIFIED status!
@@ -115,10 +134,11 @@ INSTANTIATE_TEST_SUITE_P(
       false,
       {},
       {},
-      {},
+      R"({ "status": 2 })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::VERIFIED
     },
     ParamType{  // Unable to set the Uphold wallet!
       "02_unable_to_set_the_uphold_wallet",
@@ -126,10 +146,11 @@ INSTANTIATE_TEST_SUITE_P(
       false,
       {},
       {},
-      {},
+      R"({ "status": 0 })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // Uphold returned with an error - the user is not KYC'd
       "03_uphold_returned_with_user_does_not_meet_minimum_requirements",
@@ -137,10 +158,11 @@ INSTANTIATE_TEST_SUITE_P(
       true,
       { { "error_description", "User does not meet minimum requirements" } },
       {},
-      {},
+      R"({ "status": 0 })",
       false,
       type::Result::NOT_FOUND,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // Uphold returned with an error - theoretically not possible
       "04_uphold_returned_with_an_error",
@@ -148,10 +170,11 @@ INSTANTIATE_TEST_SUITE_P(
       true,
       { { "error_description", "some other reason" } },
       {},
-      {},
+      R"({ "status": 0 })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // Arguments are empty!
       "05_arguments_are_empty",
@@ -159,10 +182,11 @@ INSTANTIATE_TEST_SUITE_P(
       true,
       {},
       {},
-      {},
+      R"({ "status": 0 })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // code is empty!
       "06_code_is_empty",
@@ -170,10 +194,11 @@ INSTANTIATE_TEST_SUITE_P(
       true,
       { { "code", "" } },
       {},
-      {},
+      R"({ "status": 0 })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // state is empty!
       "07_state_is_empty",
@@ -181,10 +206,11 @@ INSTANTIATE_TEST_SUITE_P(
       true,
       { { "code", "code" }, { "state", "" } },
       {},
-      {},
+      R"({ "status": 0 })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // One-time string mismatch!
       "08_one_time_string_mismatch",
@@ -192,10 +218,11 @@ INSTANTIATE_TEST_SUITE_P(
       true,
       { { "code", "code" }, { "state", "mismatch" } },
       {},
-      {},
+      R"({ "status": 0, "one_time_string": "one_time_string" })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // Uphold wallet is null!
       "09_uphold_wallet_is_null",
@@ -206,6 +233,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       false,
       type::Result::LEDGER_ERROR,
+      {},
       {}
     },
     ParamType{  // Attempting to re-authorize in VERIFIED status!
@@ -217,7 +245,8 @@ INSTANTIATE_TEST_SUITE_P(
       R"({ "status": 2 })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::VERIFIED
     },
     ParamType{  // Couldn't exchange code for the access token!
       "11_couldn_t_exchange_code_for_the_access_token",
@@ -231,10 +260,11 @@ INSTANTIATE_TEST_SUITE_P(
         {},
         {}
       },
-      R"({ "status": 0 })",
+      R"({ "status": 0, "one_time_string": "one_time_string" })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // Access token is empty!
       "12_access_token_is_empty",
@@ -248,10 +278,11 @@ INSTANTIATE_TEST_SUITE_P(
         R"({ "access_token": "" })",
         {}
       },
-      R"({ "status": 0 })",
+      R"({ "status": 0, "one_time_string": "one_time_string" })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
     ParamType{  // Unable to set the Uphold wallet!
       "13_unable_to_set_the_uphold_wallet",
@@ -265,13 +296,14 @@ INSTANTIATE_TEST_SUITE_P(
         R"({ "access_token": "access_token" })",
         {}
       },
-      R"({ "status": 0 })",
+      R"({ "status": 0, "one_time_string": "one_time_string" })",
       false,
       type::Result::LEDGER_ERROR,
-      {}
+      {},
+      type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // success
-      "14_success",
+    ParamType{  // happy path
+      "14_happy_path",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
       { { "code", "code" }, { "state", "one_time_string" } },
@@ -282,14 +314,15 @@ INSTANTIATE_TEST_SUITE_P(
         R"({ "access_token": "access_token" })",
         {}
       },
-      R"({ "status": 0 })",
+      R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
       type::Result::LEDGER_OK,
-      {}
-    }
-  ),
+      {},
+      type::WalletStatus::PENDING
+    }),
   StateMachine::NameSuffixGenerator
 );
+// clang-format on
 
 TEST_P(StateMachine, AuthorizationFlow) {
   const auto& params = GetParam();
@@ -301,6 +334,9 @@ TEST_P(StateMachine, AuthorizationFlow) {
   const auto set_wallet_2 = std::get<6>(params);
   const auto expected_result = std::get<7>(params);
   const auto& expected_args = std::get<8>(params);
+  const auto expected_status = std::get<9>(params);
+
+  auto uphold_wallet = uphold_wallet_1;
 
   EXPECT_CALL(*mock_ledger_client_,
               GetEncryptedStringState(state::kWalletUphold))
@@ -309,10 +345,20 @@ TEST_P(StateMachine, AuthorizationFlow) {
       .WillOnce(Return(uphold_wallet_2));
 
   EXPECT_CALL(*mock_ledger_client_,
-          SetEncryptedStringState(state::kWalletUphold, _))
+              SetEncryptedStringState(state::kWalletUphold, _))
       .Times(AtMost(2))
-      .WillOnce(Return(set_wallet_1))
-      .WillOnce(Return(set_wallet_2));
+      .WillOnce(Invoke([&](const std::string&, const std::string& value) {
+        if (set_wallet_1) {
+          uphold_wallet = value;
+        }
+        return set_wallet_1;
+      }))
+      .WillOnce(Invoke([&](const std::string&, const std::string& value) {
+        if (set_wallet_2) {
+          uphold_wallet = value;
+        }
+        return set_wallet_2;
+      }));
 
   ON_CALL(*mock_ledger_client_, LoadURL(_, _))
       .WillByDefault(
@@ -328,6 +374,14 @@ TEST_P(StateMachine, AuthorizationFlow) {
       [&](type::Result result, base::flat_map<std::string, std::string> args) {
         ASSERT_EQ(result, expected_result);
         ASSERT_EQ(args, expected_args);
+        const auto status = StateMachine::GetStatusFromJSON(
+            uphold_wallet_1 != uphold_wallet_2 ? uphold_wallet_2
+                                               : uphold_wallet);
+        if (status && expected_status) {
+          ASSERT_EQ(*status, *expected_status);
+        } else {
+          ASSERT_TRUE(!status && !expected_status);
+        }
       });
 }
 
