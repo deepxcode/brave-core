@@ -154,7 +154,7 @@ class RewardsDOMHandler : public WebUIMessageHandler,
 
   base::Value ExternalWalletToJSON(const ledger::type::Result result,
                                    const ledger::type::ExternalWalletPtr wallet,
-                                   const bool open_verify_url = false);
+                                   const bool open_login_url = false);
 
   void ProcessRewardsPageUrl(const base::ListValue* args);
 
@@ -1611,7 +1611,7 @@ void RewardsDOMHandler::GetExternalWallet(const base::ListValue* args) {
 base::Value RewardsDOMHandler::ExternalWalletToJSON(
     const ledger::type::Result result,
     const ledger::type::ExternalWalletPtr wallet,
-    const bool open_verify_url) {
+    const bool open_login_url) {
   base::Value data(base::Value::Type::DICTIONARY);
 
   data.SetIntKey("result", static_cast<int>(result));
@@ -1630,7 +1630,7 @@ base::Value RewardsDOMHandler::ExternalWalletToJSON(
   }
 
   data.SetKey("wallet", std::move(wallet_dict));
-  data.SetBoolKey("openVerifyUrl", open_verify_url);
+  data.SetBoolKey("openLoginUrl", open_login_url);
   return data;
 }
 

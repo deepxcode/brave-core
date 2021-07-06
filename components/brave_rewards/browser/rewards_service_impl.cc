@@ -44,6 +44,7 @@
 #include "brave/components/brave_ads/browser/ads_service.h"
 #include "brave/components/brave_ads/browser/buildflags/buildflags.h"
 #include "brave/components/brave_rewards/browser/android_util.h"
+#include "brave/components/brave_rewards/browser/buildflags/buildflags.h"
 #include "brave/components/brave_rewards/browser/diagnostic_log.h"
 #include "brave/components/brave_rewards/browser/logging.h"
 #include "brave/components/brave_rewards/browser/rewards_notification_service.h"
@@ -1305,7 +1306,7 @@ std::vector<std::string> RewardsServiceImpl::GetExternalWalletProviders() {
 
   providers.push_back(ledger::constant::kWalletUphold);
 
-#if !defined(OS_ANDROID)
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
   if (base::FeatureList::IsEnabled(features::kGeminiFeature)) {
     providers.push_back(ledger::constant::kWalletGemini);
   }
@@ -3458,11 +3459,11 @@ std::string RewardsServiceImpl::GetExternalWalletType() const {
   if (IsBitFlyerRegion()) {
     return ledger::constant::kWalletBitflyer;
   }
-#if defined(OS_ANDROID)
-  return ledger::constant::kWalletUphold;
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
+  return profile_->GetPrefs()->GetString(prefs::kExternalWalletType);
 #endif
 
-  return profile_->GetPrefs()->GetString(prefs::kExternalWalletType);
+  return ledger::constant::kWalletUphold;
 }
 
 void RewardsServiceImpl::SetExternalWalletType(const std::string wallet_type) {

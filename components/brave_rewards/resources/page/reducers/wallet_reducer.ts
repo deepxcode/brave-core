@@ -167,11 +167,11 @@ const walletReducer: Reducer<Rewards.State | undefined> = (state: Rewards.State,
       }
 
       state.externalWallet = action.payload.wallet
-      if (action.payload.openVerifyUrl && state.externalWallet !== undefined) {
-        let verifyUrl = state.externalWallet.verifyUrl
+      if (action.payload.openLoginUrl && state.externalWallet !== undefined) {
+        let loginUrl = state.externalWallet.loginUrl
 
-        if (verifyUrl !== '') {
-          window.open(verifyUrl, '_self')
+        if (loginUrl !== '') {
+          window.open(loginUrl, '_self')
         }
       }
       break

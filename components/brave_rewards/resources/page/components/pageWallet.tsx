@@ -359,14 +359,15 @@ class PageWallet extends React.Component<Props, State> {
   }
 
   onConnectWalletContinue = (provider?: string) => {
+    if (provider !== undefined) {
+      chrome.send('brave_rewards.setExternalWalletType', [provider])
+      return
+    }
+    
     const { externalWallet } = this.props.rewardsData
     if (externalWallet && externalWallet.loginUrl) {
       window.open(externalWallet.loginUrl, '_self')
       return
-    }
-
-    if (provider !== undefined) {
-      chrome.send('brave_rewards.setExternalWalletType', [provider])
     }
   }
 

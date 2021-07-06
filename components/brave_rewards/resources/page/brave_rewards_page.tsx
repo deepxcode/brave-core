@@ -205,8 +205,8 @@ function reconcileComplete (properties: {type: number, result: number}) {
   }
 }
 
-function externalWallet (properties: {result: number, wallet: Rewards.ExternalWallet, openVerifyUrl: boolean}) {
-  getActions().onExternalWallet(properties.result, properties.wallet, properties.openVerifyUrl)
+function externalWallet (properties: {result: number, wallet: Rewards.ExternalWallet, openLoginUrl: boolean}) {
+  getActions().onExternalWallet(properties.result, properties.wallet, properties.openLoginUrl)
 }
 
 function processRewardsPageUrl (data: Rewards.ProcessRewardsPageUrl) {

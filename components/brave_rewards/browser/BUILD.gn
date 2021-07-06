@@ -1,6 +1,7 @@
 import("//brave/components/brave_rewards/browser/buildflags/buildflags.gni")
 import("//brave/components/ipfs/buildflags/buildflags.gni")
 import("//brave/vendor/bat-native-ledger/config.gni")
+import("//build/buildflag_header.gni")
 import("//extensions/buildflags/buildflags.gni")
 
 static_library("browser") {
