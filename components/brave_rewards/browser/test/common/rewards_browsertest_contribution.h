@@ -86,6 +86,12 @@ class RewardsBrowserTestContribution
       const ledger::type::WalletStatus status =
         ledger::type::WalletStatus::VERIFIED);
 
+  void SetUpGeminiWallet(
+      brave_rewards::RewardsServiceImpl* rewards_service,
+      const double balance,
+      const ledger::type::WalletStatus status =
+        ledger::type::WalletStatus::VERIFIED);
+
   std::vector<ledger::type::Result> GetMultipleTipStatus();
 
   ledger::type::Result GetTipStatus();

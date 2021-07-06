@@ -284,7 +284,7 @@ IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ShowACPercentInThePanel) {
   EXPECT_NE(score.find("100%"), std::string::npos);
 }
 
-IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled) {
+IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled_Uphold) {
   response_->SetVerifiedWallet(true);
   rewards_browsertest_util::StartProcess(rewards_service_);
   contribution_->SetUpUpholdWallet(rewards_service_, 50.0);
@@ -316,6 +316,40 @@ IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled) {
       base::BindLambdaForTesting(test_callback));
   run_loop.Run();
 }
+
+IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled_Gemini) {
+  response_->SetVerifiedWallet(true);
+  rewards_browsertest_util::StartProcess(rewards_service_);
+  contribution_->SetUpGeminiWallet(rewards_service_, 50.0);
+
+  response_->ClearRequests();
+
+  base::RunLoop run_loop;
+  auto test_callback =
+      [&](const ledger::type::Result result,
+          ledger::type::ExternalWalletPtr wallet) {
+        auto requests = response_->GetRequests();
+        EXPECT_EQ(result, ledger::type::Result::LEDGER_OK);
+        EXPECT_FALSE(requests.empty());
+
+        // Should not attempt to call /v2/wallet/UUID/claim endpoint
+        // since by default the wallet should contain 0 `user_funds`
+        auto wallet_claim_call = std::find_if(
+            requests.begin(), requests.end(),
+            [](const Request& req) {
+              return req.url.find("/v2/wallet") != std::string::npos &&
+                     req.url.find("/claim") != std::string::npos;
+            });
+
+        EXPECT_TRUE(wallet_claim_call == requests.end());
+        run_loop.Quit();
+      };
+
+  rewards_service_->GetExternalWallet(
+      base::BindLambdaForTesting(test_callback));
+  run_loop.Run();
+}
+
 
 // https://github.com/brave/brave-browser/issues/12987
 IN_PROC_BROWSER_TEST_F(RewardsBrowserTest,

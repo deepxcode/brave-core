@@ -449,6 +449,31 @@ ledger::type::Result RewardsBrowserTestContribution::GetACStatus() {
   return ac_reconcile_status_;
 }
 
+void RewardsBrowserTestContribution::SetUpGeminiWallet(
+    brave_rewards::RewardsServiceImpl* rewards_service,
+    const double balance,
+    const ledger::type::WalletStatus status) {
+  DCHECK(rewards_service);
+  browser_->profile()->GetPrefs()->SetString(
+      brave_rewards::prefs::kExternalWalletType, "gemini");
+  // we need brave wallet as well
+  rewards_browsertest_util::CreateWallet(rewards_service_);
+
+  external_balance_ = balance;
+
+  base::Value wallet(base::Value::Type::DICTIONARY);
+  wallet.SetStringKey("token", "token");
+  wallet.SetStringKey(
+      "address",
+      rewards_browsertest_util::GetGeminiExternalAddress());
+  wallet.SetIntKey("status", static_cast<int>(status));
+  wallet.SetStringKey("user_name", "Brave Test");
+
+  std::string json;
+  base::JSONWriter::Write(wallet, &json);
+  rewards_service->SetEncryptedStringState("wallets.gemini", json);
+}
+
 void RewardsBrowserTestContribution::SetUpUpholdWallet(
     brave_rewards::RewardsServiceImpl* rewards_service,
     const double balance,
