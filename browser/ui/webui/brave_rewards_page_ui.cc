@@ -310,7 +310,7 @@ class RewardsDOMHandler : public WebUIMessageHandler,
 
   brave_rewards::RewardsService* rewards_service_;  // NOT OWNED
   brave_ads::AdsService* ads_service_;  // NOT OWNED
-  PrefChangeRegistrar profile_pref_change_registrar_;
+  PrefChangeRegistrar pref_change_registrar_;
   base::WeakPtrFactory<RewardsDOMHandler> weak_factory_;
 
   DISALLOW_COPY_AND_ASSIGN(RewardsDOMHandler);
@@ -506,12 +506,6 @@ void RewardsDOMHandler::Init() {
   rewards_service_->StartProcess(base::DoNothing());
 
   ads_service_ = brave_ads::AdsServiceFactory::GetForProfile(profile);
-
-  profile_pref_change_registrar_.Init(profile->GetPrefs());
-  profile_pref_change_registrar_.Add(
-      brave_rewards::prefs::kExternalWalletType,
-      base::BindRepeating(&RewardsDOMHandler::ExternalWalletPrefUpdated,
-                          weak_factory_.GetWeakPtr()));
 }
 
 void RewardsDOMHandler::IsInitialized(const base::ListValue* args) {
@@ -523,6 +517,7 @@ void RewardsDOMHandler::IsInitialized(const base::ListValue* args) {
 }
 
 void RewardsDOMHandler::OnJavascriptAllowed() {
+  Profile* profile = Profile::FromWebUI(web_ui());
   if (rewards_service_) {
     rewards_service_->AddObserver(this);
   }
@@ -530,6 +525,12 @@ void RewardsDOMHandler::OnJavascriptAllowed() {
   if (ads_service_) {
     ads_service_->AddObserver(this);
   }
+
+  pref_change_registrar_.Init(profile->GetPrefs());
+  pref_change_registrar_.Add(
+      brave_rewards::prefs::kExternalWalletType,
+      base::BindRepeating(&RewardsDOMHandler::ExternalWalletPrefUpdated,
+                          weak_factory_.GetWeakPtr()));
 }
 
 void RewardsDOMHandler::OnJavascriptDisallowed() {
@@ -541,6 +542,7 @@ void RewardsDOMHandler::OnJavascriptDisallowed() {
     ads_service_->RemoveObserver(this);
   }
 
+  pref_change_registrar_.RemoveAll();
   weak_factory_.InvalidateWeakPtrs();
 }
 

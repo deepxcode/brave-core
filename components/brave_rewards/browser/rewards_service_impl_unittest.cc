@@ -10,6 +10,7 @@
 #include "bat/ledger/global_constants.h"
 #include "bat/ledger/mojom_structs.h"
 #include "brave/browser/brave_rewards/rewards_service_factory.h"
+#include "brave/components/brave_rewards/browser/buildflags/buildflags.h"
 #include "brave/components/brave_rewards/browser/rewards_service_impl.h"
 #include "brave/components/brave_rewards/browser/rewards_service_observer.h"
 #include "brave/components/brave_rewards/browser/switches.h"
@@ -111,6 +112,7 @@ class RewardsServiceTest : public testing::Test {
   base::ScopedTempDir temp_dir_;
 };
 
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
 TEST_F(RewardsServiceTest, GetExternalWallet) {
   DisableGemini();
   EXPECT_EQ(rewards_service()->GetExternalWalletType(),
@@ -160,5 +162,6 @@ TEST_F(RewardsServiceTest, GetExternalWalletMultipleCustodians_JP) {
   EXPECT_EQ(rewards_service()->GetExternalWalletType(),
             ledger::constant::kWalletBitflyer);
 }
+#endif
 
 }  // namespace brave_rewards

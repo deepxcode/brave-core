@@ -19,6 +19,10 @@ config("external_config") {
     "include",
     "$target_gen_dir/include",
   ]
+  defines = [
+    "GEMINI_OAUTH_STAGING_URL=\"$gemini_oauth_staging_url\"",
+    "BITFLYER_STAGING_URL=\"$bitflyer_staging_url\"",
+  ]
 }
 
 config("internal_config") {

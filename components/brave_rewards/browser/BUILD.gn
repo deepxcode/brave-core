@@ -1,33 +1,12 @@
 import("//brave/components/brave_rewards/browser/buildflags/buildflags.gni")
 import("//brave/components/ipfs/buildflags/buildflags.gni")
 import("//brave/vendor/bat-native-ledger/config.gni")
-import("//build/buildflag_header.gni")
 import("//extensions/buildflags/buildflags.gni")
 
 static_library("browser") {
   # Remove when https://github.com/brave/brave-browser/issues/10618 is resolved
   check_includes = false
   public_deps = [ "buildflags" ]
-
-  defines = [
-    "BITFLYER_CLIENT_ID=\"$bitflyer_client_id\"",
-    "BITFLYER_CLIENT_SECRET=\"$bitflyer_client_secret\"",
-    "BITFLYER_STAGING_CLIENT_ID=\"$bitflyer_staging_client_id\"",
-    "BITFLYER_STAGING_CLIENT_SECRET=\"$bitflyer_staging_client_secret\"",
-    "BITFLYER_STAGING_URL=\"$bitflyer_staging_url\"",
-    "GEMINI_API_URL=\"$gemini_api_url\"",
-    "GEMINI_API_STAGING_URL=\"$gemini_api_staging_url\"",
-    "GEMINI_OAUTH_URL=\"$gemini_oauth_url\"",
-    "GEMINI_OAUTH_STAGING_URL=\"$gemini_oauth_staging_url\"",
-    "GEMINI_WALLET_CLIENT_ID=\"$gemini_wallet_client_id\"",
-    "GEMINI_WALLET_CLIENT_SECRET=\"$gemini_wallet_client_secret\"",
-    "GEMINI_WALLET_STAGING_CLIENT_ID=\"$gemini_wallet_staging_client_id\"",
-    "GEMINI_WALLET_STAGING_CLIENT_SECRET=\"$gemini_wallet_staging_client_secret\"",
-    "UPHOLD_CLIENT_ID=\"$uphold_client_id\"",
-    "UPHOLD_CLIENT_SECRET=\"$uphold_client_secret\"",
-    "UPHOLD_STAGING_CLIENT_ID=\"$uphold_staging_client_id\"",
-    "UPHOLD_STAGING_CLIENT_SECRET=\"$uphold_staging_client_secret\"",
-  ]
 
   sources = [
     "android_util.cc",
@@ -100,6 +79,7 @@ static_library("browser") {
     }
 
     public_deps += [ "//brave/vendor/bat-native-ledger:headers" ]
+    public_configs = [ "//brave/vendor/bat-native-ledger:external_config" ]
 
     if (is_android) {
       deps += [ "//brave/components/safetynet:android" ]
