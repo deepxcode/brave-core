@@ -26,6 +26,7 @@ using std::placeholders::_2;
 using ::testing::_;
 using ::testing::AtMost;
 using ::testing::Between;
+using ::testing::Exactly;
 using ::testing::Invoke;
 using ::testing::Return;
 using ::testing::Test;
@@ -75,8 +76,28 @@ TEST_F(UpholdTest, FetchBalanceConnectedWallet) {
   uphold_->FetchBalance(callback);
 }
 
+absl::optional<type::WalletStatus> GetStatusFromJSON(
+    const std::string& uphold_wallet) {
+  auto value = base::JSONReader::Read(uphold_wallet);
+  if (value && value->is_dict()) {
+    base::DictionaryValue* dictionary = nullptr;
+    if (value->GetAsDictionary(&dictionary)) {
+      if (auto status = dictionary->FindIntKey("status")) {
+        return static_cast<type::WalletStatus>(*status);
+      }
+    }
+  }
+
+  return {};
+}
+
+template <typename ParamType>
+std::string NameSuffixGenerator(const TestParamInfo<ParamType>& info) {
+  return std::get<0>(info.param);
+}
+
 // clang-format off
-using ParamType = std::tuple<
+using AuthorizeParamType = std::tuple<
     std::string,                               // test name suffix
     std::string,                               // Uphold wallet (1)
     bool,                                      // SetWallet() returns (1)
@@ -89,34 +110,14 @@ using ParamType = std::tuple<
     absl::optional<type::WalletStatus>         // expected status
 >;
 
-struct StateMachine : UpholdTest,
-                      WithParamInterface<ParamType> {
-  static std::string NameSuffixGenerator(
-      const TestParamInfo<StateMachine::ParamType>& info) {
-    return std::get<0>(info.param);
-  }
-
-  static absl::optional<type::WalletStatus> GetStatusFromJSON(
-      const std::string& uphold_wallet) {
-    auto value = base::JSONReader::Read(uphold_wallet);
-    if (value && value->is_dict()) {
-      base::DictionaryValue* dictionary = nullptr;
-      if (value->GetAsDictionary(&dictionary)) {
-        if (auto status = dictionary->FindIntKey("status")) {
-          return static_cast<type::WalletStatus>(*status);
-        }
-      }
-    }
-
-    return {};
-  }
-};
+struct Authorize : UpholdTest,
+                   WithParamInterface<AuthorizeParamType> {};
 
 INSTANTIATE_TEST_SUITE_P(
   UpholdTest,
-  StateMachine,
+  Authorize,
   Values(
-    ParamType{  // Uphold wallet is null!
+    AuthorizeParamType{  // Uphold wallet is null!
       "00_uphold_wallet_is_null",
       {},
       false,
@@ -128,7 +129,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       {}
     },
-    ParamType{  // Attempting to re-authorize in VERIFIED status!
+    AuthorizeParamType{  // Attempting to re-authorize in VERIFIED status!
       "01_attempting_to_re_authorize_in_verified_status",
       R"({ "status": 2 })",
       false,
@@ -140,7 +141,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::VERIFIED
     },
-    ParamType{  // Unable to set the Uphold wallet!
+    AuthorizeParamType{  // Unable to set the Uphold wallet!
       "02_unable_to_set_the_uphold_wallet",
       R"({ "status": 0 })",
       false,
@@ -152,7 +153,8 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // Uphold returned with an error - the user is not KYC'd
+    // NOLINTNEXTLINE
+    AuthorizeParamType{  // Uphold returned with an error - the user is not KYC'd
       "03_uphold_returned_with_user_does_not_meet_minimum_requirements",
       R"({ "status": 0 })",
       true,
@@ -164,7 +166,8 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // Uphold returned with an error - theoretically not possible
+    // NOLINTNEXTLINE
+    AuthorizeParamType{  // Uphold returned with an error - theoretically not possible
       "04_uphold_returned_with_an_error",
       R"({ "status": 0 })",
       true,
@@ -176,7 +179,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // Arguments are empty!
+    AuthorizeParamType{  // Arguments are empty!
       "05_arguments_are_empty",
       R"({ "status": 0 })",
       true,
@@ -188,7 +191,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // code is empty!
+    AuthorizeParamType{  // code is empty!
       "06_code_is_empty",
       R"({ "status": 0 })",
       true,
@@ -200,7 +203,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // state is empty!
+    AuthorizeParamType{  // state is empty!
       "07_state_is_empty",
       R"({ "status": 0 })",
       true,
@@ -212,7 +215,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // One-time string mismatch!
+    AuthorizeParamType{  // One-time string mismatch!
       "08_one_time_string_mismatch",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
@@ -224,7 +227,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // Uphold wallet is null!
+    AuthorizeParamType{  // Uphold wallet is null!
       "09_uphold_wallet_is_null",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
@@ -236,7 +239,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       {}
     },
-    ParamType{  // Attempting to re-authorize in VERIFIED status!
+    AuthorizeParamType{  // Attempting to re-authorize in VERIFIED status!
       "10_attempting_to_re_authorize_in_verified_status",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
@@ -248,7 +251,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::VERIFIED
     },
-    ParamType{  // Couldn't exchange code for the access token!
+    AuthorizeParamType{  // Couldn't exchange code for the access token!
       "11_couldn_t_exchange_code_for_the_access_token",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
@@ -266,7 +269,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // Access token is empty!
+    AuthorizeParamType{  // Access token is empty!
       "12_access_token_is_empty",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
@@ -284,7 +287,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // Unable to set the Uphold wallet!
+    AuthorizeParamType{  // Unable to set the Uphold wallet!
       "13_unable_to_set_the_uphold_wallet",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
@@ -302,7 +305,7 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::NOT_CONNECTED
     },
-    ParamType{  // happy path
+    AuthorizeParamType{  // happy path
       "14_happy_path",
       R"({ "status": 0, "one_time_string": "one_time_string" })",
       true,
@@ -320,11 +323,11 @@ INSTANTIATE_TEST_SUITE_P(
       {},
       type::WalletStatus::PENDING
     }),
-  StateMachine::NameSuffixGenerator
+  NameSuffixGenerator<AuthorizeParamType>
 );
 // clang-format on
 
-TEST_P(StateMachine, AuthorizationFlow) {
+TEST_P(Authorize, Paths) {
   const auto& params = GetParam();
   const auto& uphold_wallet_1 = std::get<1>(params);
   const auto set_wallet_1 = std::get<2>(params);
@@ -374,13 +377,121 @@ TEST_P(StateMachine, AuthorizationFlow) {
       [&](type::Result result, base::flat_map<std::string, std::string> args) {
         ASSERT_EQ(result, expected_result);
         ASSERT_EQ(args, expected_args);
-        const auto status = StateMachine::GetStatusFromJSON(uphold_wallet);
+
+        const auto status = GetStatusFromJSON(uphold_wallet);
         if (status && expected_status) {
           ASSERT_EQ(*status, *expected_status);
         } else {
           ASSERT_TRUE(!status && !expected_status);
         }
       });
+}
+
+// clang-format off
+using GenerateParamType = std::tuple<
+    std::string,                        // test name suffix
+    std::string,                        // Uphold wallet (1)
+    bool,                               // SetWallet() returns (1)
+    bool,                               // SetWallet() returns (2)
+    type::Result,                       // expected result
+    absl::optional<type::WalletStatus>  // expected status
+>;
+
+struct Generate : UpholdTest,
+                  WithParamInterface<GenerateParamType> {};
+
+INSTANTIATE_TEST_SUITE_P(
+  UpholdTest,
+  Generate,
+  Values(
+    GenerateParamType{  // Unable to set the Uphold wallet!
+      "00_unable_to_set_the_uphold_wallet",
+      {},
+      false,
+      false,
+      type::Result::LEDGER_ERROR,
+      {}
+    },
+    GenerateParamType{  // Unable to set the Uphold wallet!
+      "01_unable_to_set_the_uphold_wallet",
+      {},
+      true,
+      false,
+      type::Result::LEDGER_ERROR,
+      type::WalletStatus::NOT_CONNECTED
+    },
+    GenerateParamType{  // happy path
+      "02_happy_path",
+      {},
+      true,
+      true,
+      type::Result::LEDGER_OK,
+      type::WalletStatus::NOT_CONNECTED
+    },
+    GenerateParamType{  // Unable to set the Uphold wallet!
+      "03_unable_to_set_the_uphold_wallet",
+      R"({ "status": 0 })",
+      false,
+      false,
+      type::Result::LEDGER_ERROR,
+      type::WalletStatus::NOT_CONNECTED
+    },
+    GenerateParamType{  // happy path
+      "04_happy_path",
+      R"({ "status": 0 })",
+      true,
+      false,
+      type::Result::LEDGER_OK,
+      type::WalletStatus::NOT_CONNECTED
+    }),
+  NameSuffixGenerator<GenerateParamType>
+);
+// clang-format on
+
+TEST_P(Generate, Paths) {
+  const auto& params = GetParam();
+  const auto& uphold_wallet_1 = std::get<1>(params);
+  const auto set_wallet_1 = std::get<2>(params);
+  const auto set_wallet_2 = std::get<3>(params);
+  const auto expected_result = std::get<4>(params);
+  const auto expected_status = std::get<5>(params);
+
+  std::string uphold_wallet{};
+
+  EXPECT_CALL(*mock_ledger_client_,
+              GetEncryptedStringState(state::kWalletUphold))
+      .Times(Exactly(1))
+      .WillOnce([&] { return uphold_wallet = uphold_wallet_1; });
+
+  EXPECT_CALL(*mock_ledger_client_,
+              SetEncryptedStringState(state::kWalletUphold, _))
+      .Times(AtMost(2))
+      .WillOnce(Invoke([&](const std::string&, const std::string& value) {
+        if (set_wallet_1) {
+          uphold_wallet = value;
+        }
+        return set_wallet_1;
+      }))
+      .WillOnce(Invoke([&](const std::string&, const std::string& value) {
+        if (set_wallet_2) {
+          uphold_wallet = value;
+        }
+        return set_wallet_2;
+      }));
+
+  ON_CALL(*mock_ledger_impl_, database())
+      .WillByDefault(Return(mock_database_.get()));
+
+  uphold_->GenerateWallet([&](type::Result result) {
+    ASSERT_EQ(result, expected_result);
+
+    const auto status = GetStatusFromJSON(uphold_wallet);
+    if (status && expected_status) {
+      ASSERT_EQ(*status, *expected_status);
+    } else {
+      ASSERT_TRUE(!status && !expected_status);
+    }
+  });
 }
 
 }  // namespace uphold
