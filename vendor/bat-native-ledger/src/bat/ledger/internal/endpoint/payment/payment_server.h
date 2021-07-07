@@ -12,7 +12,7 @@
 #include "bat/ledger/internal/endpoint/payment/post_credentials/post_credentials.h"
 #include "bat/ledger/internal/endpoint/payment/post_order/post_order.h"
 #include "bat/ledger/internal/endpoint/payment/post_transaction_anon/post_transaction_anon.h"
-#include "bat/ledger/internal/endpoint/payment/post_transaction_gemini/post_transaction_gemini.h"
+#include "bat/ledger/internal/endpoint/payment/post_transaction_gemini/post_transaction_sku_gemini.h"
 #include "bat/ledger/internal/endpoint/payment/post_transaction_uphold/post_transaction_uphold.h"
 #include "bat/ledger/internal/endpoint/payment/post_votes/post_votes.h"
 #include "bat/ledger/ledger.h"

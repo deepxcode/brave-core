@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "base/test/task_environment.h"
-#include "bat/ledger/internal/endpoint/payment/post_transaction_gemini/post_transaction_gemini.h"
+#include "bat/ledger/internal/endpoint/payment/post_transaction_gemini/post_transaction_sku_gemini.h"
 #include "bat/ledger/internal/ledger_client_mock.h"
 #include "bat/ledger/internal/ledger_impl_mock.h"
 #include "bat/ledger/ledger.h"
