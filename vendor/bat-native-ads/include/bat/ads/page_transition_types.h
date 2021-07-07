@@ -97,7 +97,7 @@ enum PageTransitionType : int32_t {
   kPageTransitionFromAPI = 0x08000000,
 
   // General mask defining the bits used for the qualifiers.
-  kPageTransitionQualifierMask = 0xFFFFFF00,
+  kPageTransitionQualifierMask = 0x7FFFFF00,
 };
 
 }  // namespace ads
