@@ -284,7 +284,8 @@ IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ShowACPercentInThePanel) {
   EXPECT_NE(score.find("100%"), std::string::npos);
 }
 
-IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled_Uphold) {
+IN_PROC_BROWSER_TEST_F(RewardsBrowserTest,
+                       ZeroBalanceWalletClaimNotCalled_Uphold) {
   response_->SetVerifiedWallet(true);
   rewards_browsertest_util::StartProcess(rewards_service_);
   contribution_->SetUpUpholdWallet(rewards_service_, 50.0);
@@ -317,7 +318,8 @@ IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled_Uphol
   run_loop.Run();
 }
 
-IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled_Gemini) {
+IN_PROC_BROWSER_TEST_F(RewardsBrowserTest,
+                       ZeroBalanceWalletClaimNotCalled_Gemini) {
   response_->SetVerifiedWallet(true);
   rewards_browsertest_util::StartProcess(rewards_service_);
   contribution_->SetUpGeminiWallet(rewards_service_, 50.0);
@@ -349,7 +351,6 @@ IN_PROC_BROWSER_TEST_F(RewardsBrowserTest, ZeroBalanceWalletClaimNotCalled_Gemin
       base::BindLambdaForTesting(test_callback));
   run_loop.Run();
 }
-
 
 // https://github.com/brave/brave-browser/issues/12987
 IN_PROC_BROWSER_TEST_F(RewardsBrowserTest,

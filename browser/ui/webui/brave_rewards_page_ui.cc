@@ -155,9 +155,10 @@ class RewardsDOMHandler : public WebUIMessageHandler,
   void OnExternalWalletPrefUpdated(const ledger::type::Result result,
                                    ledger::type::ExternalWalletPtr wallet);
 
-  base::Value ExternalWalletToValue(const ledger::type::Result result,
-                                    const ledger::type::ExternalWalletPtr wallet,
-                                    const bool open_login_url = false);
+  base::Value ExternalWalletToValue(
+      const ledger::type::Result result,
+      const ledger::type::ExternalWalletPtr wallet,
+      const bool open_login_url = false);
 
   void ProcessRewardsPageUrl(const base::ListValue* args);
 
