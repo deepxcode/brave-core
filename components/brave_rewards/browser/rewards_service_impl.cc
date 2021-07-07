@@ -44,7 +44,7 @@
 #include "brave/components/brave_ads/browser/ads_service.h"
 #include "brave/components/brave_ads/browser/buildflags/buildflags.h"
 #include "brave/components/brave_rewards/browser/android_util.h"
-#include "brave/components/brave_rewards/browser/buildflags/buildflags.h"
+#include "brave/components/brave_rewards/common/buildflags/buildflags.h"
 #include "brave/components/brave_rewards/browser/diagnostic_log.h"
 #include "brave/components/brave_rewards/browser/logging.h"
 #include "brave/components/brave_rewards/browser/rewards_notification_service.h"

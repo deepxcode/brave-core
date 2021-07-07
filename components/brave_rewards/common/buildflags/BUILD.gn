@@ -1,0 +1,9 @@
+import("//build/buildflag_header.gni")
+import("//brave/components/brave_rewards/common/buildflags/buildflags.gni")
+
+buildflag_header("buildflags") {
+  header = "buildflags.h"
+  flags = [
+    "ENABLE_GEMINI_WALLET=$enable_gemini_wallet",
+  ]
+}

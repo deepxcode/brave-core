@@ -6,12 +6,15 @@
 #include "brave/components/brave_rewards/common/features.h"
 
 #include "base/feature_list.h"
+#include "brave/components/brave_rewards/common/buildflags/buildflags.h"
 
 namespace brave_rewards {
 namespace features {
 
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
 const base::Feature kGeminiFeature{"BraveRewardsGemini",
-                                   base::FEATURE_ENABLED_BY_DEFAULT};
+                                   base::FEATURE_DISABLED_BY_DEFAULT};
+#endif
 
 const base::Feature kVerboseLoggingFeature{"BraveRewardsVerboseLogging",
                                            base::FEATURE_DISABLED_BY_DEFAULT};

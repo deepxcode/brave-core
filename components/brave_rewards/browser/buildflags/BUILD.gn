@@ -5,6 +5,5 @@ buildflag_header("buildflags") {
   header = "buildflags.h"
   flags = [
     "BRAVE_REWARDS_ENABLED=$brave_rewards_enabled",
-    "ENABLE_GEMINI_WALLET=$enable_gemini_wallet",
   ]
 }
