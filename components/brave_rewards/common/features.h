@@ -17,7 +17,7 @@ namespace features {
 
 #if BUILDFLAG(ENABLE_GEMINI_WALLET)
 extern const base::Feature kGeminiFeature;
-#endif 
+#endif
 
 extern const base::Feature kVerboseLoggingFeature;
 
