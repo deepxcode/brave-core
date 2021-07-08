@@ -32,6 +32,7 @@ static_library("browser") {
   deps = [
     "//base",
     "//brave/components/brave_rewards/common",
+    "//brave/components/brave_rewards/common/buildflags",
 
     # for profile.h
     "//components/domain_reliability",
@@ -79,7 +80,6 @@ static_library("browser") {
     }
 
     public_deps += [ "//brave/vendor/bat-native-ledger:headers" ]
-    public_configs = [ "//brave/vendor/bat-native-ledger:external_config" ]
 
     if (is_android) {
       deps += [ "//brave/components/safetynet:android" ]

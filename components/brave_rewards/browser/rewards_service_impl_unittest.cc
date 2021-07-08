@@ -90,13 +90,17 @@ class RewardsServiceTest : public testing::Test {
   RewardsServiceImpl* rewards_service() { return rewards_service_; }
   MockRewardsServiceObserver* observer() { return observer_.get(); }
 
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
   void EnableGemini() {
     feature_list_.InitAndEnableFeature(features::kGeminiFeature);
   }
+#endif
 
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
   void DisableGemini() {
     feature_list_.InitAndDisableFeature(features::kGeminiFeature);
   }
+#endif
 
  protected:
   base::test::ScopedFeatureList feature_list_;

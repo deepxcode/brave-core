@@ -6,7 +6,6 @@
 #include "brave/components/brave_rewards/common/features.h"
 
 #include "base/feature_list.h"
-#include "brave/components/brave_rewards/common/buildflags/buildflags.h"
 
 namespace brave_rewards {
 namespace features {

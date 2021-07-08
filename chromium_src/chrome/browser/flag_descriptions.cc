@@ -3,6 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include "brave/components/brave_rewards/common/buildflags/buildflags.h"
+
 #include "../../../../chrome/browser/flag_descriptions.cc"
 
 namespace flag_descriptions {
@@ -103,7 +105,10 @@ const char kBravePermissionLifetimeName[] = "Permission Lifetime";
 const char kBravePermissionLifetimeDescription[] =
     "Enables the option to choose a time period after which a permission will "
     "be automatically revoked";
+
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
 const char kBraveRewardsGeminiName[] = "Enable Gemini for Brave Rewards";
 const char kBraveRewardsGeminiDescription[] =
     "Enables support for Gemini as an external wallet provider for Brave";
+#endif
 }  // namespace flag_descriptions

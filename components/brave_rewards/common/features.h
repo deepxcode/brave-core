@@ -6,6 +6,8 @@
 #ifndef BRAVE_COMPONENTS_BRAVE_REWARDS_COMMON_FEATURES_H_
 #define BRAVE_COMPONENTS_BRAVE_REWARDS_COMMON_FEATURES_H_
 
+#include "brave/components/brave_rewards/common/buildflags/buildflags.h"
+
 namespace base {
 struct Feature;
 }  // namespace base
@@ -13,7 +15,10 @@ struct Feature;
 namespace brave_rewards {
 namespace features {
 
+#if BUILDFLAG(ENABLE_GEMINI_WALLET)
 extern const base::Feature kGeminiFeature;
+#endif 
+
 extern const base::Feature kVerboseLoggingFeature;
 
 }  // namespace features
