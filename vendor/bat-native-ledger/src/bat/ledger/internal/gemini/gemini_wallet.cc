@@ -25,7 +25,7 @@ GeminiWallet::GeminiWallet(LedgerImpl* ledger) : ledger_(ledger) {}
 GeminiWallet::~GeminiWallet() = default;
 
 void GeminiWallet::Generate(ledger::ResultCallback callback) {
-  auto wallet = GetWallet(ledger_);
+  auto wallet = ledger_->gemini()->GetWallet();
   if (!wallet) {
     wallet = type::ExternalWallet::New();
     wallet->type = constant::kWalletGemini;

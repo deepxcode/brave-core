@@ -41,7 +41,7 @@ void GeminiAuthorization::Authorize(
     return;
   }
 
-  auto gemini_wallet = GetWallet(ledger_);
+  auto gemini_wallet = ledger_->gemini()->GetWallet();
   if (!gemini_wallet) {
     BLOG(0, "Wallet is null");
     callback(type::Result::LEDGER_ERROR, {});
@@ -168,7 +168,7 @@ void GeminiAuthorization::OnPostAccount(
     return;
   }
 
-  auto wallet_ptr = GetWallet(ledger_);
+  auto wallet_ptr = ledger_->gemini()->GetWallet();
 
   wallet_ptr->token = token;
   wallet_ptr->address = address;
@@ -193,7 +193,7 @@ void GeminiAuthorization::OnClaimWallet(
                                                {}, [](type::Result) {});
 
     std::string event_text = "gemini";
-    if (auto wallet_ptr = GetWallet(ledger_))
+    if (auto wallet_ptr = ledger_->gemini()->GetWallet())
       event_text += "/" + wallet_ptr->address.substr(0, 5);
 
     ledger_->database()->SaveEventLog(log::kDeviceLimitReached, event_text);
@@ -207,7 +207,7 @@ void GeminiAuthorization::OnClaimWallet(
     return;
   }
 
-  auto wallet_ptr = GetWallet(ledger_);
+  auto wallet_ptr = ledger_->gemini()->GetWallet();
 
   switch (wallet_ptr->status) {
     case type::WalletStatus::NOT_CONNECTED:

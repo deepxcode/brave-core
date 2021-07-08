@@ -6,10 +6,13 @@
 #include <utility>
 
 #include "base/strings/stringprintf.h"
+#include "bat/ledger/global_constants.h"
 #include "bat/ledger/internal/endpoint/gemini/gemini_server.h"
+#include "bat/ledger/internal/gemini/gemini.h"
 #include "bat/ledger/internal/gemini/gemini_transfer.h"
 #include "bat/ledger/internal/gemini/gemini_util.h"
 #include "bat/ledger/internal/ledger_impl.h"
+#include "bat/ledger/internal/wallet/wallet_util.h"
 #include "net/http/http_status_code.h"
 
 using std::placeholders::_1;
@@ -27,7 +30,7 @@ GeminiTransfer::~GeminiTransfer() = default;
 
 void GeminiTransfer::Start(const Transaction& transaction,
                            client::TransactionCallback callback) {
-  auto wallet = GetWallet(ledger_);
+  auto wallet = ledger_->gemini()->GetWallet();
   if (!wallet) {
     BLOG(0, "Wallet is null");
     callback(type::Result::LEDGER_ERROR, "");

@@ -18,6 +18,8 @@
 #include "bat/ledger/internal/gemini/gemini_wallet.h"
 #include "bat/ledger/internal/ledger_impl.h"
 #include "bat/ledger/internal/logging/event_log_keys.h"
+#include "bat/ledger/internal/state/state_keys.h"
+#include "bat/ledger/internal/wallet/wallet_util.h"
 #include "brave_base/random.h"
 
 using std::placeholders::_1;
@@ -168,7 +170,7 @@ void Gemini::DisconnectWallet(const bool manual) {
             wallet->address.substr(0, 5));
   }
 
-  wallet = ResetWallet(std::move(wallet));
+  wallet = ::ledger::wallet::ResetWallet(std::move(wallet), constant::kWalletGemini);
 
   const bool shutting_down = ledger_->IsShuttingDown();
 
@@ -263,11 +265,11 @@ void Gemini::OnTransferFeeTimerElapsed(const std::string& id,
 }
 
 type::ExternalWalletPtr Gemini::GetWallet() {
-  return ::ledger::gemini::GetWallet(ledger_);
+  return ::ledger::wallet::GetWallet(ledger_, constant::kWalletGemini);
 }
 
 bool Gemini::SetWallet(type::ExternalWalletPtr wallet) {
-  return ::ledger::gemini::SetWallet(ledger_, std::move(wallet));
+  return ::ledger::wallet::SetWallet(ledger_, std::move(wallet), state::kWalletGemini);
 }
 
 void Gemini::RemoveTransferFee(const std::string& contribution_id) {
