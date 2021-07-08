@@ -25,7 +25,6 @@ std::unique_ptr<Profile> CreateBraveRewardsProfile(const base::FilePath& path) {
   // Bitmap fetcher service needed for rewards service
   BitmapFetcherServiceFactory::GetInstance();
   RewardsServiceFactory::GetInstance();
-  brave_ads::AdsServiceFactory::GetInstance();
   sync_preferences::PrefServiceMockFactory factory;
   auto registry = base::MakeRefCounted<user_prefs::PrefRegistrySyncable>();
   std::unique_ptr<sync_preferences::PrefServiceSyncable> prefs(
